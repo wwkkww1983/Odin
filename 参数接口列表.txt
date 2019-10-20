@@ -1,0 +1,13 @@
+robotConfigData.typeOfRobot 和 parameter[ROBOT_TYPE]		机器人类型，分5类
+parameter[WEAPON_TYPE]						武器种类，分3类，英雄车可设置：17、42、42+17
+parameter[LOCAL_ID]						主控板ID，可选4个，只有0x0101是主控，其他4个都是从控
+parameter[OUR_CAMP]						己方阵营颜色，可选红和蓝
+parameter[GIMBAL_CTR_SCALE]					遥控器控制灵敏度
+parameter[GIMBAL_KB_SCALE]					键鼠控制灵敏度
+parameter[CHASSIS_KB_ACC]					键鼠控制下的加速度
+parameter[YAW_CENTER] 和 parameter[PITCH_CENTER]		云台电机的码盘校准值
+parameter[VIEW_YAW] 和 parameter[VIEW_PITCH]			视角切换电机的码盘校准值
+parameter[SHOOT_LOW_PWM]和parameter[SHOOT_HIGH_PWM]		低射速和高射速的PWM值0
+每个PID函数的接口，可以更改值。
+
+
