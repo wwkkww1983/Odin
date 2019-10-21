@@ -50,10 +50,8 @@
 /************
 工程车登岛
 *************/
-#define ID_LINE_DISTANCE         0x601     //线位移传感器  包含距离和速度
 #define ID_OPTOLECTONIC_SWITCH   0x602     //黄管信号
 #define ID_SENSORDATA            0x704     //抓弹传感器数据
-#define ID_TOF1_4DATE            0x401     //tof1-4数据
 #define ID_OPTOLECTONIC1_SWITCH  0x604
 #define ID_OPTOLECTONIC2_SWITCH  0x606
 #define MELT_DATA                0x602
@@ -115,10 +113,9 @@
 #define UP_OPEN								pneumaticData.send3[2]=1		//抬升开
 #define UP_CLOSE							pneumaticData.send3[2]=0		//抬升关
 
-#define ONE_LEFT              allAutoUpDate.optoelectronicRecive[0]
-#define ONE_RIGHT             allAutoUpDate.optoelectronicRecive[1]
-#define TWO_LEFT              allAutoUpDate.optoelectronicRecive[2]
-#define PAWTURN_SENSOR        allAutoUpDate.magSwitch  		//翻转爪子传感器 0为检测到收回爪子
+#define ONE_LEFT              auxiliaryData.optoelectronicRecive[0]
+#define ONE_RIGHT             auxiliaryData.optoelectronicRecive[1]
+#define TWO_LEFT              auxiliaryData.optoelectronicRecive[2]
 
 /************
 工程车救援
@@ -137,48 +134,16 @@
 
 typedef struct 
 {
-//	uint8_t auxiliarySchdule;
-	uint8_t schedule1;
-	uint8_t deformingCount;
-	uint8_t holdPillarPidFlag[2];
-	
-	formatTrans16Struct_t tofdate[2];      								//tof数据
-	uint8_t selfdeformingComplete;    										//登岛任务完成标志
-	uint8_t grabBulletComplete;
-	uint8_t downIslandComplete;
-	uint8_t liftSchedule;     														//工程车上升任务进度
-	uint8_t grabSchedule;   														  //抓弹任务进度
-	uint8_t dowmIslandSchedule;  													//下岛任务进度
-	uint8_t optoelectronicRecive[8];						 					//光电开关返回信号
-	uint8_t magSwitch;																		//气缸磁力传感器
-	uint8_t solenoidvalueContralSignal[8];    						//抱柱电磁阀控制信号  //0：抱柱电磁阀  1:
-	uint8_t grabOpContralSignal[8];   										//爪子电磁阀控制信号
-	uint8_t ductedFan[2];            											//涵道左对应ductedFan[0]
-	
-	
-	formatTrans32Struct_t liftSpeed[2];										//工程车当前上升速度
-	formatTrans32Struct_t liftDistance[2];                //工程车当前上升距离    由拉绳式位移传感器返回
-	float speedRef[2];                 								    //上升期望
-	float speedOut[2];
-	float positionRef[2];
-	float positionOut[2];
-	float checkPositionDistence[6];      									//1测纵向对位距离，23测底盘旋转后据底盘的距离,4.5为抓弹时测与墙的位置	
-	pidStruct_t *liftSpeedPID[2];
-	pidStruct_t *liftPositionPID[2];
-	float revolveFbd[2];
-	float revolveRef[2];
-  float revolveOut[2];
-	pidStruct_t *imuRevolvePID[2];
-	float pawmotorSpeedFbd[2];
-	float pawmotorSpeedRef[2];
-  float pawmotorSpeedOut[2];
+	uint8_t optoelectronicRecive[8];						 					//光电开关返回信号			.
+	pidData_t pawangle[2];
+	pidData_t pawmotor[2];
 	pidStruct_t *pawmotorSpeedPID[2];
+	pidStruct_t *pawmotorAnglePID[2];
 	float intervalTime;
-//	float adc_test[8];
 	
-}allAutoUpStruct_t;         														//整车上升(包含登岛抓弹下岛全数据)
+}auxiliaryStruct_t;         														//整车上升(包含登岛抓弹下岛全数据)
 
-extern allAutoUpStruct_t allAutoUpDate;  
+extern auxiliaryStruct_t auxiliaryData;  
 
 void mechaDeformingUpdate(void);
 void mechaDeformingInit(void);
@@ -191,7 +156,7 @@ uint8_t supplyGrabForward(void);				//前伸
 /********
 工程车
 ********/
-void readLineDistance_data(CanRxMsg *can_rx_msg,allAutoUpStruct_t *allAutoUpDate);   //读取线位移传感器距离值
+void readLineDistance_data(CanRxMsg *can_rx_msg,auxiliaryStruct_t *auxiliaryData);   //读取线位移传感器距离值
 void readOpSwitch602_data(CanRxMsg *can_rx_msg);   //光电开关
 void SensorDataReceive(CanRxMsg *can_rx_msg);
 void readmeltSwitch608_data(CanRxMsg *can_rx_msg);    //黄管信号 01是底盘信号 23是抓蛋对位

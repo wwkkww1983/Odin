@@ -230,6 +230,7 @@ void controlUpdateTask(void *Parameters){
 		if(robotConfigData.distinguishState == ROBOT_COMPLETE_IDENTIFIED \
 			|| localIdData.distinguishState == ID_COMPLETE_IDENTIFIED){					
 			congtrolGlobalInit();																								//所有控制全部初始化，机器人有的结构进行初始化
+				
 			robotConfigData.distinguishState = ROBOT_NO_NEED_TO_IDENTIFY;				//拉低防止重复初始化，防止重复给ID
 			localIdData.distinguishState = ID_NO_NEED_TO_IDENTIFY;
 			autoTaskInit();																											//自动任务初始化
@@ -240,7 +241,7 @@ void controlUpdateTask(void *Parameters){
 			getGlobalMode();                    																//获取机器人模式
 			getShootMode();											 																//获取摩擦轮模式
 			if(slaveSensorData.initFlag){
-				moduleCommandUpload(SLAVE_SENSOR_USARTX);																						//发送控制指令到云台板
+				moduleCommandUpload(SLAVE_SENSOR_USARTX);													//发送控制指令到云台板
 				if(robotConfigData.typeOfRobot == TANK_ID)
 					controlDataUpload();
 			}

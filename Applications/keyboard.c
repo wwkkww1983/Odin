@@ -268,10 +268,8 @@ static void moveDirectionCtrl(uint8_t forward, uint8_t back,uint8_t left, uint8_
 
 static void gimbalOperationFunc(int16_t pitRefSpd, int16_t yawRefSpd){
 	if( robotMode == MODE_KM ){
-	#if YAW_SPEED_SINGLE
-		if(robotMode == MODE_KM && !(gimbalData.autoMode && visionData.captureFlagvisionData.captureFlag&&visionData.cailSuccess) \
+		if(robotMode == MODE_KM && !(gimbalData.autoMode && visionData.captureFlag) \
 			&& !infantryAutoData.rotateFlag && ROBOT == INFANTRY_ID){
-		
 			//鼠标给云台角速度期望，Yaw轴闭角速度单环
 			keyBoardCtrlData.yawSpeedTarget = -yawRefSpd * parameter[GIMBAL_KB_SCALE] * 32;
 			//角速度期望限幅
@@ -282,9 +280,7 @@ static void gimbalOperationFunc(int16_t pitRefSpd, int16_t yawRefSpd){
 			//闭角度外环
 			keyBoardCtrlData.yawGyroTarget = yawRefSpd * parameter[GIMBAL_KB_SCALE] * 2;
 		}
- 	#else
-		keyBoardCtrlData.yawGyroTarget = yawRefSpd * parameter[GIMBAL_KB_SCALE] * 2;
-	#endif
+
 		keyBoardCtrlData.pitchGyroTarget = -pitRefSpd * parameter[GIMBAL_KB_SCALE] * 2;
 	}
 	else{

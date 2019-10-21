@@ -383,6 +383,11 @@
           <GroupName>app</GroupName>
           <Files>
             <File>
+              <FileName>app_Init.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Applications\app_Init.c</FilePath>
+            </File>
+            <File>
               <FileName>auto_auxiliary.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Applications\auto_auxiliary.c</FilePath>
@@ -411,11 +416,6 @@
               <FileName>auto_uav.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Applications\auto_uav.c</FilePath>
-            </File>
-            <File>
-              <FileName>app_Init.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Applications\app_Init.c</FilePath>
             </File>
             <File>
               <FileName>adrc.c</FileName>
@@ -461,11 +461,6 @@
               <FileName>deforming.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Applications\deforming.c</FilePath>
-            </File>
-            <File>
-              <FileName>d_imu.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>.\Applications\d_imu.c</FilePath>
             </File>
             <File>
               <FileName>data_transmission.c</FileName>

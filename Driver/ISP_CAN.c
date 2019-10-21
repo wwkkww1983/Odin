@@ -125,14 +125,8 @@ void CAN2_RX0_IRQHandler(void){
 					rmmotor_readdata(&can2_rx_msg,&pawMotorData[1]);
 					break;
 				}
-				case ID_LINE_DISTANCE:{
-					readLineDistance_data(&can2_rx_msg,&allAutoUpDate);
-				}break;
 				case ID_OPTOLECTONIC_SWITCH:{
 					readOpSwitch602_data(&can2_rx_msg); 
-				}break;
-				case ID_TOF1_4DATE:{
-					tof_readdata(&can2_rx_msg);
 				}break;
 				case ID_PNEUMATIC:{
 					pneumatic_readData(&can2_rx_msg);

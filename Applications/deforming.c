@@ -15,54 +15,26 @@
 #include "auto_auxiliary.h"
 #include "imu.h"
 
-allAutoUpStruct_t allAutoUpDate; 
+auxiliaryStruct_t auxiliaryData; 
 
 /*********************************/
 /*******接收传感器板的数据*********/
 /*********************************/
-void readLineDistance_data(CanRxMsg *can_rx_msg,allAutoUpStruct_t *allAutoUpDate)    //读取线位移传感器距离以及升降机构速度值
-{
-	
-}
 
 void readOpSwitch602_data(CanRxMsg *can_rx_msg)    //
 {
 	for(int i = 0 ; i < 8 ; i++ ){
-		allAutoUpDate.optoelectronicRecive[i] = can_rx_msg->Data[i];
+		auxiliaryData.optoelectronicRecive[i] = can_rx_msg->Data[i];
 	}
 }
 
-void readmeltSwitch608_data(CanRxMsg *can_rx_msg)    //
-{
-		allAutoUpDate.magSwitch = can_rx_msg->Data[0];
-}
 
-void tof_readdata(CanRxMsg *can_rx_msg)
-{
-	if((can_rx_msg->Data[0] == 0XAC)&&(can_rx_msg->Data[1] == 0XAD)){
-	 allAutoUpDate.tofdate[0].u8_temp[0] = can_rx_msg->Data[2];
-	 allAutoUpDate.tofdate[0].u8_temp[1] = can_rx_msg->Data[3];
-	}
-}
 
-void tof_readdata2(CanRxMsg *can_rx_msg)
-{
-	if((can_rx_msg->Data[0] == 0XAC)&&(can_rx_msg->Data[1] == 0XAD)){
-	 allAutoUpDate.tofdate[1].u8_temp[0] = can_rx_msg->Data[2];
-	 allAutoUpDate.tofdate[1].u8_temp[1] = can_rx_msg->Data[3];
-	}
-}
-
-void SensorDataReceive(CanRxMsg *can_rx_msg)					//传感器接收函数
-{
-	
-}
 /*************************
 工程车逻辑程序
 **************************/
 /* 电机位置数据过零处理，避免出现位置突变的情况 */	
 void motorRawAngle(rmmotorTarData_t* tarMotor,motorCanDataRecv_t* srcMotor){
-
 	tarMotor->last_fdbPosition = tarMotor->fdbPosition;
 	tarMotor->fdbPosition = srcMotor->rawangle;
 	if(tarMotor->fdbPosition - tarMotor->last_fdbPosition > 4096)
@@ -155,9 +127,15 @@ void mechaDeformingUpdate(void)								//负责车身变形的控制
 		
 	}
 	else if(robotConfigData.typeOfRobot == AUXILIARY_ID){
-		for(i = 0;i<2;i++)
-			motorRawAngle(&pawMotorTarData[i],&pawMotorData[i]);
-    liftUpdate();
+		motorRawAngle(&pawMotorTarData[0],&pawMotorData[0]);
+		auxiliaryData.pawangle[0].dataFbd = pawMotorTarData[0].real_position;
+		auxiliaryData.pawangle[0].dataOut = pidUpdate(auxiliaryData.pawmotorAnglePID[0],auxiliaryData.pawangle[0].dataRef,auxiliaryData.pawangle[0].dataFbd,auxiliaryData.intervalTime);
+		auxiliaryData.pawmotor[0].dataRef = -auxiliaryData.pawangle[0].dataOut;
+		auxiliaryData.pawmotor[1].dataRef = auxiliaryData.pawangle[0].dataOut;	
+		for(i = 0;i<2;i++){
+			auxiliaryData.pawmotor[i].dataOut= pidUpdate(auxiliaryData.pawmotorSpeedPID[i],auxiliaryData.pawmotor[i].dataRef,auxiliaryData.pawmotor[i].dataFbd,auxiliaryData.intervalTime);
+		}
+		liftUpdate();
 	}
 }
 
@@ -168,11 +146,13 @@ void mechaDeformingUpdate(void)								//负责车身变形的控制
 static void deformationLiftInit(void)    /*  同步带升降pid初始化  */
 {
 	RampInit(&liftRamp, 2000);
-	allAutoUpDate.schedule1=1;
-	allAutoUpDate.deformingCount=1;
-	for(int i=0;i<2;i++){
-		allAutoUpDate.positionRef[i]=INITDISTANCE;
-		/***/
+	for(uint8_t index = 0;index < 2;index++){			
+		auxiliaryData.pawmotorSpeedPID[index] = pidInit(&parameter[CHASSIS_POS_P], &parameter[CHASSIS_POS_I], &parameter[CHASSIS_POS_D], &parameter[CHASSIS_POS_F],	\
+												 	  &parameter[CHASSIS_POS_PM], &parameter[CHASSIS_POS_IM], &parameter[CHASSIS_POS_DM], &parameter[CHASSIS_POS_OM],	\
+													  NULL, NULL, NULL, NULL); 
+		auxiliaryData.pawmotorAnglePID[index] = pidInit(&parameter[CHASSIS_POS_P], &parameter[CHASSIS_POS_I], &parameter[CHASSIS_POS_D], &parameter[CHASSIS_POS_F],	\
+												 	  &parameter[CHASSIS_POS_PM], &parameter[CHASSIS_POS_IM], &parameter[CHASSIS_POS_DM], &parameter[CHASSIS_POS_OM],	\
+													  NULL, NULL, NULL, NULL); 
 	}
 }
 

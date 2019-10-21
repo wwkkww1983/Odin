@@ -25,6 +25,12 @@ typedef struct {
 	differentialDataStruct_t *differential;
 } pidStruct_t;
 
+typedef struct {
+	float dataFbd;
+	float dataRef;
+  float dataOut;
+} pidData_t;
+
 pidStruct_t *pidInit(float *p, float *i, float *d, float *f, float *pMax, float *iMax, float *dMax, float *oMax, int16_t *pTrim, int16_t *iTrim, int16_t *dTrim, int16_t *fTrim);
 float pidUpdate(pidStruct_t *pid, float setpoint, float position,float Dt);
 void pidZeroIntegral(pidStruct_t *pid, float pv, float iState);

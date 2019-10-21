@@ -112,7 +112,6 @@ void gimbalUpdate(void){
 		gimbalData.yawAngleRef = gimbalData.yawAngleFbd;	
 	}
 	
-#if YAW_SPEED_SINGLE
 	//只有鼠标给云台期望时才执行
 	if(robotMode == MODE_KM && !(gimbalData.autoMode && visionData.captureFlag && visionData.cailSuccess) \
 		&& !infantryAutoData.rotateFlag && ROBOT == INFANTRY_ID){
@@ -122,7 +121,7 @@ void gimbalUpdate(void){
 		if(!keyBoardCtrlData.yawSpeedTarget){
 			if(gimbalData.angleCycleStep == 2 || gimbalData.angleCycleStep == 0){
 				gimbalData.yawAngleOut = pidUpdate(gimbalData.yawAnglePID, gimbalData.yawAngleRef, gimbalData.yawAngleFbd,gimbalData.intervalTime); 
-				gimbalData.yawSpeedRef = -gimbalData.yawAngleOut;	
+				gimbalData.yawSpeedRef = -gimbalData.yawAngleOut;																		
 			}
 		}
 	}
@@ -130,10 +129,6 @@ void gimbalUpdate(void){
 		gimbalData.yawAngleOut   = pidUpdate(gimbalData.yawAnglePID, gimbalData.yawAngleRef, gimbalData.yawAngleFbd,gimbalData.intervalTime); 
 		gimbalData.yawSpeedRef   = -gimbalData.yawAngleOut;
 	}
-#else
-	gimbalData.yawAngleOut = pidUpdate(gimbalData.yawAnglePID, gimbalData.yawAngleRef, gimbalData.yawAngleFbd,gimbalData.intervalTime); 
-	gimbalData.yawSpeedRef = -gimbalData.yawAngleOut;
-#endif
 
 	gimbalData.pitchAngleOut = pidUpdate(gimbalData.pitchAnglePID, gimbalData.pitchAngleRef, gimbalData.pitchAngleFbd,gimbalData.intervalTime);
 	gimbalData.pitchSpeedRef = -gimbalData.pitchAngleOut;
@@ -226,6 +221,7 @@ static void gimbalPatrolHandle(void){
 
 float shiftAngle = 0;
 static void gimbalFollowHandle(void){
+	static float lastYawSpeedRef;
 	digitalClan(&gimbalData.initFinishFlag);
 	digitalClan(&gimbalData.motorFlag);
 	if(parameter[ROBOT_TYPE] == SMALLGIMBAL_ID){
@@ -234,32 +230,10 @@ static void gimbalFollowHandle(void){
 	else{
 		gimbalData.pitchAngleFbd = gimbalData.pitchGyroAngle;
 		gimbalData.yawAngleFbd = gimbalData.yawGyroAngle - gimbalData.yawAngleSave;
-		
+		gimbalData.yawAngleRef += remoteControlData.yawGyroTarget + keyBoardCtrlData.yawGyroTarget;
 		gimbalData.pitchAngleRef += remoteControlData.pitchGyroTarget + keyBoardCtrlData.pitchGyroTarget;
-		//英雄云台限幅
-		if(ROBOT == TANK_ID){
-			if(fabs(chassisData.chaseFbd) > 35.0f ){
-				gimbalData.yawAngleRef += 0.35f * (remoteControlData.yawGyroTarget + keyBoardCtrlData.yawGyroTarget);
-			}
-			else
-				gimbalData.yawAngleRef += remoteControlData.yawGyroTarget + keyBoardCtrlData.yawGyroTarget;
-		}
-		else if(ROBOT == UAV_ID){
-			if(gimbalData.yawMotorAngle < -10.0f){
-				gimbalData.yawAngleRef += 0.1f;
-			}
-			else if(gimbalData.yawMotorAngle > 170.0f){
-				gimbalData.yawAngleRef -= 0.1f;
-			}
-			else
-				gimbalData.yawAngleRef += remoteControlData.yawGyroTarget + keyBoardCtrlData.yawGyroTarget;
-		}
-		else
-			gimbalData.yawAngleRef += remoteControlData.yawGyroTarget + keyBoardCtrlData.yawGyroTarget;
-	#if YAW_SPEED_SINGLE
-		if(robotMode == MODE_KM && !(gimbalData.autoMode && visionData.captureFlag && visionData.captureFlag&&visionData.cailSuccess) \
+		if(robotMode == MODE_KM && !(gimbalData.autoMode && visionData.captureFlag) \
 			&& !infantryAutoData.rotateFlag && ROBOT == INFANTRY_ID){
-			static float lastYawSpeedRef;
 			//鼠标从运动到停止，不能以此时角度闭环
 			if(!keyBoardCtrlData.yawSpeedTarget && lastYawSpeedRef){
 				gimbalData.angleCycleStep = 1;
@@ -271,7 +245,6 @@ static void gimbalFollowHandle(void){
 			}
 			lastYawSpeedRef = keyBoardCtrlData.yawSpeedTarget;
 		}
-	#endif
 	}
 	if(robotConfigData.typeOfRobot == AUXILIARY_ID){
 	  gimbalData.yawAngleFbd  = getInstallDirect(parameter[YAW_INSTALL],INSTALL_ENCODER) * gimbalData.yawMotorAngle;
@@ -280,6 +253,7 @@ static void gimbalFollowHandle(void){
 	//pitch轴角度限幅
 	gimbalData.pitchAngleRef = constrainFloat(gimbalData.pitchAngleRef, parameter[PITCH_MIN_RANGE], parameter[PITCH_MAX_RANGE]); 
 }
+
 
 static void gimbalInitHandle(void){
 	static float pitchRampAngle;
