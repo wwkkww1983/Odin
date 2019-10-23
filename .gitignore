@@ -1,4 +1,3 @@
-/Objects
-
-Odin.uvoptx 
-Odin.uvguix.* 
+!/Objects/
+*.uvoptx.
+*.uvguix 
