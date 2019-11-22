@@ -13,11 +13,12 @@ rmmotorCanDataRecv_t pitchMotorData,yawMotorData;
 currentCanDataRecv_t currentDate;
 motorMeasureData_t   motorViewPitData,motorViewYawData;
 motorMeasureData_t   motorGM3510PitData;
+
 /****************************机器人类型电机变量*********************************/
 motorCanDataRecv_t	 pawMotorData[2];												//工程爪子
 motorCanDataRecv_t	 deformMotorData[2];										//工程横向变形机构
 motorCanDataRecv_t	 liftMotorData[2];											//工程抬升机构
-rmmotorTarData_t 		 pawMotorTarData[2];		
+rmmotorTarData_t 	 pawMotorTarData[2];
 /*****************************************************************************/                 
 
 /****************************本文件使用的静态变量******************************/
@@ -147,20 +148,36 @@ void rmmotor_senddata(CAN_TypeDef *CANx, u32 ID_CAN, motorSerialNumber_t *rmmoto
 	}
 }
 
-int16_t getRelativePos(int16_t rawEcd, int16_t centerOffset){
+int16_t getRelativePos(int16_t rawEcd, int16_t centerOffset,rmmotorCanDataRecv_t *gimbalMotor){
   int16_t tmp = 0;
-  if (centerOffset >= 4096){
-    if (rawEcd > centerOffset - 4096)
-      tmp = rawEcd - centerOffset;
-    else
-      tmp = rawEcd + 8192 - centerOffset;
+  if(gimbalMotor->motorID < MOTOR_RL7015){
+	  if (centerOffset >= 4096){
+		if (rawEcd > centerOffset - 4096)
+		  tmp = rawEcd - centerOffset;
+		else
+		  tmp = rawEcd + 8192 - centerOffset;
+	  }
+	  else{
+		if (rawEcd > centerOffset + 4096)
+		  tmp = rawEcd - 8192 - centerOffset;
+		else
+		  tmp = rawEcd - centerOffset;
+	  }
   }
   else{
-    if (rawEcd > centerOffset + 4096)
-      tmp = rawEcd - 8192 - centerOffset;
-    else
-      tmp = rawEcd - centerOffset;
-  }
+	  if (centerOffset >= 8192){
+		if (rawEcd > centerOffset - 8192)
+		  tmp = rawEcd - centerOffset;
+		else
+		  tmp = rawEcd + 16384 - centerOffset;
+	  }
+	  else{
+		if (rawEcd > centerOffset + 8192)
+		  tmp = rawEcd - 16384 - centerOffset;
+		else
+		  tmp = rawEcd - centerOffset;
+	  }
+  }	  
   return tmp;
 }
 
@@ -275,20 +292,32 @@ void gimbal_readData(CanRxMsg *can_rx_msg,rmmotorCanDataRecv_t *gimbal_data){
 	switch(gimbal_data -> motorID){
 		case MOTOR_6623: {
 			gimbal_data -> M6623Data . encoderAngle = ((uint16_t)can_rx_msg->Data[0] << 8) | can_rx_msg->Data[1];
-	    gimbal_data -> M6623Data . realcurrent = (( int16_t)can_rx_msg->Data[2] << 8) | can_rx_msg->Data[3];
-	    gimbal_data -> M6623Data . current = (int16_t)(can_rx_msg->Data[4] << 8) | can_rx_msg->Data[5];
+			gimbal_data -> M6623Data . realcurrent = (( int16_t)can_rx_msg->Data[2] << 8) | can_rx_msg->Data[3];
+			gimbal_data -> M6623Data . current = (int16_t)(can_rx_msg->Data[4] << 8) | can_rx_msg->Data[5];
 		}break;
 		case MOTOR_6020: {
 			gimbal_data -> GM6020Data . rawangle = ((uint16_t)can_rx_msg->Data[0] << 8) | can_rx_msg->Data[1];
 			gimbal_data -> GM6020Data . speed 	 = (( int16_t)can_rx_msg->Data[2] << 8) | can_rx_msg->Data[3];
 			gimbal_data -> GM6020Data . currunt  = (( int16_t)can_rx_msg->Data[4] << 8) | can_rx_msg->Data[5];
 			gimbal_data -> GM6020Data . temperature = ( int8_t)can_rx_msg->Data[6];
-	}break;
+		}break;
 		case MOTOR_3510: {
-		gimbal_data -> GM3510Data . encoderAngle = ((uint16_t)can_rx_msg->Data[0] << 8) | can_rx_msg->Data[1];
-		gimbal_data -> GM3510Data . realcurrent 	= (( int16_t)can_rx_msg->Data[2] << 8) | can_rx_msg->Data[3];
-		gimbal_data -> GM3510Data . current = (int16_t)(can_rx_msg->Data[4] << 8) | can_rx_msg->Data[5];
-	}break;
+			gimbal_data -> GM3510Data . encoderAngle = ((uint16_t)can_rx_msg->Data[0] << 8) | can_rx_msg->Data[1];
+			gimbal_data -> GM3510Data . realcurrent 	= (( int16_t)can_rx_msg->Data[2] << 8) | can_rx_msg->Data[3];
+			gimbal_data -> GM3510Data . current = (int16_t)(can_rx_msg->Data[4] << 8) | can_rx_msg->Data[5];
+		}break;
+		case MOTOR_RL7015:{
+			gimbal_data->RMD_L_7015Data.molotovDataSheet.motorEncoder = ((uint16_t)can_rx_msg->Data[7] << 8) | can_rx_msg->Data[6];
+			gimbal_data->RMD_L_7015Data.molotovDataSheet.motorSpeed   = ((int16_t)can_rx_msg->Data[5] << 8) | can_rx_msg->Data[4];
+			gimbal_data->RMD_L_7015Data.molotovDataSheet.temperature  = (int8_t)can_rx_msg->Data[1];
+			gimbal_data->RMD_L_7015Data.molotovDataSheet.iq			  = ((int16_t)can_rx_msg->Data[3] << 8) | can_rx_msg->Data[2];
+		}break;
+		case MOTOR_RL9015:{
+			gimbal_data->RMD_L_9015Data.molotovDataSheet.motorEncoder = ((uint16_t)can_rx_msg->Data[7] << 8) | can_rx_msg->Data[6];
+			gimbal_data->RMD_L_9015Data.molotovDataSheet.motorSpeed   = ((int16_t)can_rx_msg->Data[5] << 8) | can_rx_msg->Data[4];
+			gimbal_data->RMD_L_9015Data.molotovDataSheet.temperature  = (int8_t)can_rx_msg->Data[1];
+			gimbal_data->RMD_L_9015Data.molotovDataSheet.iq			  = ((int16_t)can_rx_msg->Data[3] << 8) | can_rx_msg->Data[2];
+		}break;
 	  default: break;
 	}
 
@@ -322,19 +351,31 @@ void gimbal_readSlaveData(uint8_t dataNumber,vs16 writeData,rmmotorCanDataRecv_t
 				case TURN_SPEED:         gimbal_data -> GM6020Data . speed = writeData;break;
 				case TEMPER:             gimbal_data -> GM6020Data . temperature = writeData;break;
 			}
-	}break;
+		}break;
 		case MOTOR_3510: {
 			switch(dataNumber){
 				case CODEBOARD_VALUE:    gimbal_data -> GM3510Data . encoderAngle = writeData;break;
 				case REALTORQUE_CURRENT: gimbal_data -> GM3510Data . realcurrent = writeData;break;
 				case TORQUE_CURRENT:     gimbal_data -> GM3510Data . current = writeData;break;
 			}
-	}break;
+		}break;
 		case MOTOR_9015: {
 			switch(dataNumber){
 				case CODEBOARD_VALUE:    gimbal_data -> DM9015Data . encoderAngle = writeData;break;
 			}
-	}break;
+		}break;
+		case MOTOR_RL7015:{
+			switch(dataNumber){
+				case CODEBOARD_VALUE: gimbal_data->RMD_L_7015Data.molotovDataSheet.motorEncoder = writeData;break;
+				case TORQUE_CURRENT: gimbal_data->RMD_L_7015Data.molotovDataSheet.iq = writeData;break;
+			}
+		}break;
+		case MOTOR_RL9015:{
+			switch(dataNumber){
+				case CODEBOARD_VALUE: gimbal_data->RMD_L_9015Data.molotovDataSheet.motorEncoder = writeData;break;
+				case TORQUE_CURRENT: gimbal_data->RMD_L_9015Data.molotovDataSheet.iq = writeData;break;	
+			}
+		}break;			
 	  default: break;
 	}
 
@@ -381,6 +422,18 @@ vs16 gimbal_chooseData(uint8_t dataNumber,rmmotorCanDataRecv_t *gimbal_data){
 				case CODEBOARD_VALUE:   dataChoose = gimbal_data -> DM9015Data . encoderAngle;break;
 			}
 	}break;
+		case MOTOR_RL7015:{
+			switch(dataNumber){
+				case CODEBOARD_VALUE: dataChoose = gimbal_data->RMD_L_7015Data.molotovDataSheet.motorEncoder;break;
+				case TORQUE_CURRENT: dataChoose = gimbal_data->RMD_L_7015Data.molotovDataSheet.iq;break;
+			}
+		}break;
+		case MOTOR_RL9015:{
+			switch(dataNumber){
+				case CODEBOARD_VALUE: dataChoose = gimbal_data->RMD_L_9015Data.molotovDataSheet.motorEncoder;break;
+				case TORQUE_CURRENT: dataChoose = gimbal_data->RMD_L_9015Data.molotovDataSheet.iq;break;	
+			}
+		}break;
 	  default: break;
 	}
     return  dataChoose;

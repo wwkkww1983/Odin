@@ -194,7 +194,10 @@ static void followGimbalHandle(void){
 	float sinAngle;
 	float cosAngle;
 
-	gimbalData.yawMotorAngle   = ENCODER_ANGLE_RATIO * getRelativePos(gimbal_chooseData(CODEBOARD_VALUE,&yawMotorData),parameter[YAW_CENTER]);
+	if(yawMotorData.motorID < MOTOR_RL7015)
+		gimbalData.yawMotorAngle   = ENCODER_ANGLE_RATIO13 * getRelativePos(gimbal_chooseData(CODEBOARD_VALUE,&yawMotorData),parameter[YAW_CENTER],&yawMotorData);
+	else 
+		gimbalData.yawMotorAngle   = ENCODER_ANGLE_RATIO14 * getRelativePos(gimbal_chooseData(CODEBOARD_VALUE,&yawMotorData),parameter[YAW_CENTER],&yawMotorData);
 	//µ×ÅÌ¸úËæ·´À¡¸³Öµ	
 	chassisData.chaseFbd = gimbalData.yawMotorAngle;     
 	
@@ -226,7 +229,7 @@ static void followGimbalHandle(void){
 	chassisData.manualSpeedTarget.y = (remoteControlData.chassisSpeedTarget.x + keyBoardCtrlData.chassisSpeedTarget.x) * sinAngle \
 									  + (remoteControlData.chassisSpeedTarget.y + keyBoardCtrlData.chassisSpeedTarget.y) * cosAngle;
 #ifdef ADD_IMU_RATE_PID
-	chassisData.chaseAngleOut = -getInstallDirect(parameter[YAW_INSTALL], INSTALL_TURN) \
+	chassisData.chaseAngleOut = getInstallDirect(parameter[YAW_INSTALL], INSTALL_TURN) \
 								* pidUpdate(chassisData.chasePID, chassisData.chaseFbd, \
 											chassisData.chaseRef, chassisData.intervalTime);
 	chassisData.chaseSpeedRef = chassisData.chaseAngleOut;

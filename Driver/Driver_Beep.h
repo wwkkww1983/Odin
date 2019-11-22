@@ -5,8 +5,8 @@
 #include "stm32f4xx.h"
 
 /* 主控型号选择，同时只能定义一个 */
-#define USE_2019_A			//2019第一版主控，全接口
-//#define USE_2019_B			//2019第二版主控，串口与CAN为焊盘，新增ADC接口
+//#define USE_2019_A			//2019第一版主控，全接口
+#define USE_2019_B			//2019第二版主控，串口与CAN为焊盘，新增ADC接口
 
 #ifdef USE_2019_A
 #define BEEP_LENGTH 50

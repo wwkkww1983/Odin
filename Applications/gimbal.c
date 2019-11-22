@@ -136,7 +136,7 @@ void gimbalUpdate(void){
 	gimbalData.pitchSpeedFbd = IMU_RATEY;                    // 速度环反馈用imu角速度速度
 	gimbalData.yawSpeedFbd   = IMU_RATEZ;
 	
-	gimbalData.pitchSpeedOut = getInstallDirect(parameter[PITCH_INSTALL],INSTALL_TURN) * pidUpdate(gimbalData.pitchSpeedPID, gimbalData.pitchSpeedRef, gimbalData.pitchSpeedFbd,gimbalData.intervalTime);
+	gimbalData.pitchSpeedOut = -getInstallDirect(parameter[PITCH_INSTALL],INSTALL_TURN) * pidUpdate(gimbalData.pitchSpeedPID, gimbalData.pitchSpeedRef, gimbalData.pitchSpeedFbd,gimbalData.intervalTime);
 	gimbalData.yawSpeedOut   = getInstallDirect(parameter[YAW_INSTALL],INSTALL_TURN) * pidUpdate(gimbalData.yawSpeedPID, gimbalData.yawSpeedRef, gimbalData.yawSpeedFbd,gimbalData.intervalTime);
 	if(robotMode == MODE_RELAX){
 		digitalClan(&gimbalData.yawSpeedOut);
@@ -262,11 +262,11 @@ static void gimbalInitHandle(void){
 	if(lastRobotMode != robotMode||gimbalData.ctrlMode != gimbalData.lastCtrlMode){																			//每一次进入初始化模式都获取当前角度并初始化斜坡函数
 		xLastWakeTime = xTaskGetTickCount();
 		gimbalRampInit();
-	  pitchRampAngle = getInstallDirect(parameter[PITCH_INSTALL],INSTALL_ENCODER) * gimbalData.pitchMotorAngle;  				//获取pitch轴imu当前角度
+		pitchRampAngle = getInstallDirect(parameter[PITCH_INSTALL],INSTALL_ENCODER) * gimbalData.pitchMotorAngle;  				//获取pitch轴imu当前角度
 		yawRampAngle   = getInstallDirect(parameter[YAW_INSTALL],INSTALL_ENCODER) * gimbalData.yawMotorAngle;   					//获取yaw码盘当前角度
 	}
 	gimbalData.pitchAngleFbd = getInstallDirect(parameter[PITCH_INSTALL],INSTALL_ENCODER) * gimbalData.pitchMotorAngle;	//设置pitch轴反馈
-  gimbalData.pitchAngleRef = pitchRampAngle * (1 - LinearRampCalc(&pitchRamp,2));																			//pitch轴回中
+	gimbalData.pitchAngleRef = pitchRampAngle * (1 - LinearRampCalc(&pitchRamp,2));																			//pitch轴回中
 
 	gimbalData.yawAngleFbd = getInstallDirect(parameter[YAW_INSTALL],INSTALL_ENCODER) * gimbalData.yawMotorAngle;   		//设置yaw轴反馈
 	gimbalData.yawAngleRef = yawRampAngle * (1 - LinearRampCalc(&yawRamp,2));       																		//yaw轴回中

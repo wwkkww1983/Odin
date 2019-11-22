@@ -63,9 +63,15 @@ void remoteCtrlGimbalHook(void){
   gimbalOperationFunc(RC_PITCH, RC_RUDD);
 }
 
-void getGimbalCtrlDate(void){										//获取云台控制数据             							
-	gimbalData.pitchMotorAngle = ENCODER_ANGLE_RATIO * getRelativePos(gimbal_chooseData(CODEBOARD_VALUE,&pitchMotorData),parameter[PITCH_CENTER]);//云台码盘值连续处理
-  gimbalData.yawMotorAngle = ENCODER_ANGLE_RATIO * getRelativePos(gimbal_chooseData(CODEBOARD_VALUE,&yawMotorData),parameter[YAW_CENTER]);
+void getGimbalCtrlDate(void){										//获取云台控制数据 
+	if(pitchMotorData.motorID < MOTOR_RL7015)
+		gimbalData.pitchMotorAngle = ENCODER_ANGLE_RATIO13 * getRelativePos(gimbal_chooseData(CODEBOARD_VALUE,&pitchMotorData),parameter[PITCH_CENTER],&pitchMotorData);
+	else
+		gimbalData.pitchMotorAngle = ENCODER_ANGLE_RATIO14 * getRelativePos(gimbal_chooseData(CODEBOARD_VALUE,&pitchMotorData),parameter[PITCH_CENTER],&pitchMotorData);//云台码盘值连续处理
+	if(yawMotorData.motorID < MOTOR_RL7015)
+		gimbalData.yawMotorAngle = ENCODER_ANGLE_RATIO13 * getRelativePos(gimbal_chooseData(CODEBOARD_VALUE,&yawMotorData),parameter[YAW_CENTER],&yawMotorData);
+	else
+		gimbalData.yawMotorAngle = ENCODER_ANGLE_RATIO14 * getRelativePos(gimbal_chooseData(CODEBOARD_VALUE,&yawMotorData),parameter[YAW_CENTER],&yawMotorData);
 	gimbalData.pitchGyroAngle = AQ_PITCH;         //pitch轴角度
 	gimbalData.yawGyroAngle   = AQ_YAW;		 			  //yaw轴角度
 	keyboardGimbalHook();                 				//云台键盘操作数据处理

@@ -30,7 +30,12 @@ void canSendGimbalUpdate(void){
 		switch(ROBOT){
 			case INFANTRY_ID:
 			case TANK_ID:{
-				canSendData.can1_0x2FF.currunt2 = (short)gimbalData.pitchSpeedOut;
+				canSendData.can1_0x141.cmd = RMDL_IQ_CMD;
+				canSendData.can1_0x141.data[3] = (uint8_t)((short)gimbalData.pitchSpeedOut & 0xFF);
+				canSendData.can1_0x141.data[4] = (uint8_t)(((short)gimbalData.pitchSpeedOut >> 8) & 0xFF);
+				canSendData.can1_0x142.cmd = RMDL_IQ_CMD;
+				canSendData.can1_0x142.data[3] = (uint8_t)((short)gimbalData.yawSpeedOut & 0xFF);
+				canSendData.can1_0x142.data[4] = (uint8_t)(((short)gimbalData.yawSpeedOut >> 8) & 0xFF);
 				break;
 			}	
 			case SENTRY_ID:
@@ -145,7 +150,8 @@ void canSendUpToRobot(){
 			break;
 		}
 		case INFANTRY_ID:{
-			rs485SendGimbalUpdata(YAW);
+			RMDLMolotovSendData(CAN1,PITCH_RMD,&canSendData.can1_0x141);
+			RMDLMolotovSendData(CAN1,YAW_RMD,&canSendData.can1_0x142);
 			break;
 		}
 		case TANK_ID:{
@@ -181,18 +187,18 @@ void canSendUpToRobot(){
 			break;
 		}
 	}
-	
-	
-	rmmotor_senddata(CAN1, 0x200,&canSendData.can1_0x200);	              								//地盘
-	if(ROBOT != AUXILIARY_ID)
-		rmmotor_senddata(CAN1, 0x2FF,&canSendData.can1_0x2FF);
 	if(parameter[ROBOT_TYPE] != SMALLGIMBAL_ID)
-		rmmotor_senddata(CAN2, 0x1FF,&canSendData.can2_0x1FF);		
+		rmmotor_senddata(CAN2, 0x1FF,&canSendData.can2_0x1FF);
 	if(!((canSendData.loops + 1) % 2)){																										//250Hz  轮循发送　
 		rmmotor_senddata(CAN1, 0x1FF,&canSendData.can1_0x1FF);															//步兵弹仓盖、拨弹盘、17mm摩擦轮、工程抓取机构 
 		if((parameter[ROBOT_TYPE] != SMALLGIMBAL_ID))																				//主控才发can2电机数据，不然会副控can2数据跟主主控数据冲突
 			rmmotor_senddata(CAN2, 0x200,&canSendData.can2_0x200);														//（英雄）42mm摩擦轮 筛弹电机 拨弹电机
 	}
+	rmmotor_senddata(CAN1, 0x200,&canSendData.can1_0x200);	              								//地盘
+	if(ROBOT != AUXILIARY_ID)
+		rmmotor_senddata(CAN1, 0x2FF,&canSendData.can1_0x2FF);
+			
+	
 	
 	
 }

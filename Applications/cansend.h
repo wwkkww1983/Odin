@@ -3,20 +3,23 @@
 #include "BSP.h"
 #include "Util.h"
 #include "Driver_RMMotor.h"
+#include "Driver_DMMotor.h"
 #include "local_id.h"
 #include "DRIVER_VL53L0X.h"
 #include "pneumatic.h"
 #include "stdbool.h"
-
+#include "Driver_RMDMotor.h"
 #define ROBOT	robotConfigData.typeOfRobot
 
 typedef struct {
 	motorSerialNumber_t can1_0x2FF;
-  motorSerialNumber_t can1_0x200;
+	motorSerialNumber_t can1_0x200;
 	motorSerialNumber_t can1_0x1FF;
 	motorSerialNumber_t can2_0x200;
 	motorSerialNumber_t can2_0x1FF;
-	canUserData_t 			can1_0x401;
+	RMDLCANSendStruct_t can1_0x141;
+	RMDLCANSendStruct_t can1_0x142;
+	canUserData_t 		can1_0x401;
 	vl53l0x_state_data_t   can1_0x501;	
 	pneumatic_state_data_t can2_0x401;
 	bool canForward;

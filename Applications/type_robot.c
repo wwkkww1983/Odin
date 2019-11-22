@@ -19,9 +19,9 @@ void currentRobotParameterConfig(void){
 			parameter[PITCH_MIN_RANGE] = INFANTRY_PITCH_MIN_RANGE;					//最小俯仰角(云台抬起为负数)
 			parameter[PITCH_MAX_RANGE] = INFANTRY_PITCH_MAX_RANGE;					//最大俯仰角
 			parameter[PITCH_INSTALL] = parameter[PITCH_FIX] + parameter[PITCH_TURN];		//获取云台安装方向
-			parameter[YAW_INSTALL] = parameter[YAW_FIX] + parameter[YAW_TURN];      
-			pitchMotorData.motorID = parameter[PITCH_TYPE];    //获取pitch轴电机ID
-      yawMotorData.motorID = parameter[YAW_TYPE];        //获取taw轴电机ID
+			parameter[YAW_INSTALL] = INFANTRY_YAW_INSTALL;      
+			pitchMotorData.motorID = MOTOR_RL7015;    //获取pitch轴电机ID
+			yawMotorData.motorID = MOTOR_RL9015;        //获取taw轴电机ID
 			//步兵功率限制参数配置
 			powerData.powerLimit = INFANTR_POWER_LIMIT;
 			powerData.warningPower = INFANTR_WARNING_POWER;
@@ -31,6 +31,7 @@ void currentRobotParameterConfig(void){
 			powerData.addPowerCurrent = INFANTR_ADD_POWER_CURRENT;
 			robotConfigData.robotDeviceList = INFANTRY_DEVICE_LIST;
 		}break;
+
 
 		case TANK_ID:{									//英雄车ID
 				parameter[WEAPON_TYPE] = DOUBLE_LAUNCHER;

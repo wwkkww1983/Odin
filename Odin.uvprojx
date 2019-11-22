@@ -638,6 +638,11 @@
               <FilePath>.\Driver\Driver_Multi_Master.c</FilePath>
             </File>
             <File>
+              <FileName>Driver_RMDMotor.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>.\Driver\Driver_RMDMotor.c</FilePath>
+            </File>
+            <File>
               <FileName>Driver_RMDT7.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\Driver\Driver_RMDT7.c</FilePath>

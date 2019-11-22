@@ -69,6 +69,14 @@ void CAN1_RX0_IRQHandler(void){
 				powerDataReceive(&can1_rx_msg.Data[0]);
 				digitalIncreasing(&chassisData.currentError.errorCount);		
 				break;
+			case PITCH_RMD:
+				gimbal_readData(&can1_rx_msg,&pitchMotorData);
+				digitalIncreasing(&gimbalData.gimbalError[0].errorCount);
+				break;
+			case YAW_RMD:
+				gimbal_readData(&can1_rx_msg,&yawMotorData);
+				digitalIncreasing(&gimbalData.gimbalError[1].errorCount);
+				break;
 			default:	break;		
 		}
 	}
