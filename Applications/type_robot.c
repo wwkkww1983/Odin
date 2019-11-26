@@ -144,8 +144,6 @@ void identifyTheCurrentRobot(void *Parameters){
 				parameter[ROBOT_TYPE] = robotConfigData.typeOfRobot;					//储存机器人种类
 				robotConfigData.distinguishState = ROBOT_COMPLETE_IDENTIFIED;	//表示识别完毕
 				parameterReadDataFromTFCard(parameter[ROBOT_TYPE]);           //从TF卡里读PID参数
-        motorMessageReadDataFromTFCard(parameter[ROBOT_TYPE]);        //从TF卡里面读电机配置参数
-	      readMotormessage();
 				currentRobotParameterConfig();																//配置不同机器人所对应的默认参数
 				digitalHi(&supervisorData.flashSave);													//开启储存到flash
 				vTaskDelete(robotConfigData.xHandleTask);											//删除本任务

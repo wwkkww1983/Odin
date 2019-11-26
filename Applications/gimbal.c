@@ -367,12 +367,12 @@ void gimbalInit(void){
 	gimbalData.ctrlMode  = GIMBAL_RELAX;
 	gimbalRampInit();
 	
-	gimbalData.pitchSpeedPID = pidInit(&parameter[TILT_RATE_P], &parameter[TILT_RATE_I], &parameter[TILT_RATE_D], &parameter[TILT_RATE_F],	\
-																&parameter[TILT_RATE_PM], &parameter[TILT_RATE_IM], &parameter[TILT_RATE_DM], &parameter[TILT_RATE_OM],	\
+	gimbalData.pitchSpeedPID = pidInit(&parameter[PITCH_RATE_P], &parameter[PITCH_RATE_I], &parameter[PITCH_RATE_D], &parameter[PITCH_RATE_F],	\
+																&parameter[PITCH_RATE_PM], &parameter[PITCH_RATE_IM], &parameter[PITCH_RATE_DM], &parameter[PITCH_RATE_OM],	\
 																NULL, NULL, NULL, NULL);
 
-	gimbalData.pitchAnglePID = pidInit(&parameter[TILT_ANG_P], &parameter[TILT_ANG_I], &parameter[TILT_ANG_D], &parameter[TILT_ANG_F],	\
-																 &parameter[TILT_ANG_PM], &parameter[TILT_ANG_IM], &parameter[TILT_ANG_DM], &parameter[TILT_ANG_OM],	\
+	gimbalData.pitchAnglePID = pidInit(&parameter[PITCH_ANG_P], &parameter[PITCH_ANG_I], &parameter[PITCH_ANG_D], &parameter[PITCH_ANG_F],	\
+																 &parameter[PITCH_ANG_PM], &parameter[PITCH_ANG_IM], &parameter[PITCH_ANG_DM], &parameter[PITCH_ANG_OM],	\
 																 NULL, NULL, NULL, NULL);
 
 	gimbalData.yawSpeedPID = pidInit(&parameter[YAW_RATE_P], &parameter[YAW_RATE_I], &parameter[YAW_RATE_D], &parameter[YAW_RATE_F],	\

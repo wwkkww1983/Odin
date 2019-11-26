@@ -2,7 +2,7 @@
 #define __RAMP_H
 
 #include "arm_math.h"
-#define PI					3.14159265358979f
+//#define PI					3.14159265358979f
 
 typedef struct __Ramp_t
 {

@@ -184,16 +184,16 @@ void ANO_DT_Data_Exchange(void){
 	else if(f.sendPid1)
 	{
 		f.sendPid1 = 0;
-		ANO_DT_Send_PID(1,0.001f*parameter[TILT_RATE_P],0.001f*parameter[TILT_RATE_I],0.001f*parameter[TILT_RATE_D],
-											0.001f*parameter[TILT_RATE_P],0.001f*parameter[TILT_RATE_I],0.001f*parameter[TILT_RATE_D],
+		ANO_DT_Send_PID(1,0.001f*parameter[PITCH_RATE_P],0.001f*parameter[PITCH_RATE_I],0.001f*parameter[PITCH_RATE_D],
+											0.001f*parameter[PITCH_RATE_P],0.001f*parameter[PITCH_RATE_I],0.001f*parameter[PITCH_RATE_D],
 											0.001f*parameter[YAW_RATE_P],0.001f*parameter[YAW_RATE_I],0.001f*parameter[YAW_RATE_D]);
 	}	
 ///////////////////////////////////////////////////////////////////////////////////////
 	else if(f.sendPid2)
 	{
 		f.sendPid2 = 0;
-		ANO_DT_Send_PID(2,parameter[TILT_ANG_P],parameter[TILT_ANG_I],parameter[TILT_ANG_D],
-											parameter[TILT_ANG_P],parameter[TILT_ANG_I],parameter[TILT_ANG_D],
+		ANO_DT_Send_PID(2,parameter[PITCH_ANG_P],parameter[PITCH_ANG_I],parameter[PITCH_ANG_D],
+											parameter[PITCH_ANG_P],parameter[PITCH_ANG_I],parameter[PITCH_ANG_D],
 											parameter[YAW_ANG_P],parameter[YAW_ANG_I],parameter[YAW_ANG_D]);
 	}
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -202,12 +202,12 @@ void ANO_DT_Data_Exchange(void){
 		f.sendPid3 = 0;
 		ANO_DT_Send_PID(3,0.1f*parameter[CHASSIS_SPEED_P],0.1f*parameter[CHASSIS_SPEED_I],0.1f*parameter[CHASSIS_SPEED_D],
 											0.01f*parameter[CHASSIS_CHASE_P],0.01f*parameter[CHASSIS_CHASE_I],0.01f*parameter[CHASSIS_CHASE_D],
-											0.01f*parameter[PROPORTIONAL_SPEED_P],0.01f*parameter[PROPORTIONAL_SPEED_I],0.01f*parameter[PROPORTIONAL_SPEED_D]);
+											0,0,0);
 	}
 	else if(f.sendPid4)
 	{
 		f.sendPid4 = 0;
-		ANO_DT_Send_PID(4,parameter[PROPORTIONAL_POS_P],parameter[PROPORTIONAL_POS_I],parameter[PROPORTIONAL_POS_D],
+		ANO_DT_Send_PID(4,0,0,0,
 											parameter[LOADED_SPEED_P],parameter[LOADED_SPEED_I],parameter[LOADED_SPEED_D],
 											0,0,0);
 	}
@@ -670,12 +670,12 @@ void ANO_DT_Data_Receive_Anl(u8 *data_buf,u8 num){
 	}
 	if(*(data_buf+2)==0X10)								//PID1
 	{
-		parameter[TILT_RATE_P]  = 1*( (vs16)(*(data_buf+4)<<8)|*(data_buf+5) );
-		parameter[TILT_RATE_I]  = 1*( (vs16)(*(data_buf+6)<<8)|*(data_buf+7) );
-		parameter[TILT_RATE_D]  = 1*( (vs16)(*(data_buf+8)<<8)|*(data_buf+9) );
-		parameter[TILT_RATE_P] = 1*( (vs16)(*(data_buf+10)<<8)|*(data_buf+11) );
-		parameter[TILT_RATE_I] = 1*( (vs16)(*(data_buf+12)<<8)|*(data_buf+13) );
-		parameter[TILT_RATE_D] = 1*( (vs16)(*(data_buf+14)<<8)|*(data_buf+15) );
+		parameter[PITCH_RATE_P]  = 1*( (vs16)(*(data_buf+4)<<8)|*(data_buf+5) );
+		parameter[PITCH_RATE_I]  = 1*( (vs16)(*(data_buf+6)<<8)|*(data_buf+7) );
+		parameter[PITCH_RATE_D]  = 1*( (vs16)(*(data_buf+8)<<8)|*(data_buf+9) );
+		parameter[PITCH_RATE_P] = 1*( (vs16)(*(data_buf+10)<<8)|*(data_buf+11) );
+		parameter[PITCH_RATE_I] = 1*( (vs16)(*(data_buf+12)<<8)|*(data_buf+13) );
+		parameter[PITCH_RATE_D] = 1*( (vs16)(*(data_buf+14)<<8)|*(data_buf+15) );
 		parameter[YAW_RATE_P] 	= 1*( (vs16)(*(data_buf+16)<<8)|*(data_buf+17) );
 		parameter[YAW_RATE_I] 	= 1*( (vs16)(*(data_buf+18)<<8)|*(data_buf+19) );
 		parameter[YAW_RATE_D] 	= 1*( (vs16)(*(data_buf+20)<<8)|*(data_buf+21) );
@@ -689,8 +689,8 @@ void ANO_DT_Data_Receive_Anl(u8 *data_buf,u8 num){
 //		pidZeroState(controlData.pitchRatePID);
 //		pidZeroState(controlData.yawRatePID);
 //		
-//		controlData.rollRatePID = pidInit(&parameter[TILT_RATE_P], &parameter[TILT_RATE_I], &parameter[TILT_RATE_D], &parameter[TILT_RATE_F],	\
-//																		 &parameter[TILT_RATE_PM], &parameter[TILT_RATE_IM], &parameter[TILT_RATE_PM], &parameter[TILT_RATE_OM],	\
+//		controlData.rollRatePID = pidInit(&parameter[PITCH_RATE_P], &parameter[PITCH_RATE_I], &parameter[PITCH_RATE_D], &parameter[PITCH_RATE_F],	\
+//																		 &parameter[PITCH_RATE_PM], &parameter[PITCH_RATE_IM], &parameter[PITCH_RATE_PM], &parameter[PITCH_RATE_OM],	\
 //																		 0, 0, 0, 0);
 //		controlData.pitchRatePID = controlData.rollRatePID;
 //		controlData.yawRatePID = 		pidInit(&parameter[YAW_RATE_P], &parameter[YAW_RATE_I], &parameter[YAW_RATE_D], &parameter[YAW_RATE_F],	\
@@ -700,12 +700,12 @@ void ANO_DT_Data_Receive_Anl(u8 *data_buf,u8 num){
 	}
 	if(*(data_buf+2)==0X11)								//PID2
 	{
-		parameter[TILT_ANG_P]  = 0.001*( (vs16)(*(data_buf+4)<<8)|*(data_buf+5) );
-		parameter[TILT_ANG_I]  = 0.001*( (vs16)(*(data_buf+6)<<8)|*(data_buf+7) );
-		parameter[TILT_ANG_D]  = 0.001*( (vs16)(*(data_buf+8)<<8)|*(data_buf+9) );
-		parameter[TILT_ANG_P] = 0.001*( (vs16)(*(data_buf+10)<<8)|*(data_buf+11) );
-		parameter[TILT_ANG_I] = 0.001*( (vs16)(*(data_buf+12)<<8)|*(data_buf+13) );
-		parameter[TILT_ANG_D] = 0.001*( (vs16)(*(data_buf+14)<<8)|*(data_buf+15) );
+		parameter[PITCH_ANG_P]  = 0.001*( (vs16)(*(data_buf+4)<<8)|*(data_buf+5) );
+		parameter[PITCH_ANG_I]  = 0.001*( (vs16)(*(data_buf+6)<<8)|*(data_buf+7) );
+		parameter[PITCH_ANG_D]  = 0.001*( (vs16)(*(data_buf+8)<<8)|*(data_buf+9) );
+		parameter[PITCH_ANG_P] = 0.001*( (vs16)(*(data_buf+10)<<8)|*(data_buf+11) );
+		parameter[PITCH_ANG_I] = 0.001*( (vs16)(*(data_buf+12)<<8)|*(data_buf+13) );
+		parameter[PITCH_ANG_D] = 0.001*( (vs16)(*(data_buf+14)<<8)|*(data_buf+15) );
 		parameter[YAW_ANG_P] 	= 0.001*( (vs16)(*(data_buf+16)<<8)|*(data_buf+17) );
 		parameter[YAW_ANG_I] 	= 0.001*( (vs16)(*(data_buf+18)<<8)|*(data_buf+19) );
 		parameter[YAW_ANG_D] 	= 0.001*( (vs16)(*(data_buf+20)<<8)|*(data_buf+21) );
@@ -719,8 +719,8 @@ void ANO_DT_Data_Receive_Anl(u8 *data_buf,u8 num){
 //		pidZeroState(controlData.pitchAnglePID);
 //		pidZeroState(controlData.yawAnglePID);
 //		
-//		controlData.rollAnglePID = 	pidInit(&parameter[TILT_ANG_P], &parameter[TILT_ANG_I], &parameter[TILT_ANG_D], &parameter[TILT_ANG_F],	\
-//																		 &parameter[TILT_ANG_PM], &parameter[TILT_ANG_IM], &parameter[TILT_ANG_PM], &parameter[TILT_ANG_OM],	\
+//		controlData.rollAnglePID = 	pidInit(&parameter[PITCH_ANG_P], &parameter[PITCH_ANG_I], &parameter[PITCH_ANG_D], &parameter[PITCH_ANG_F],	\
+//																		 &parameter[PITCH_ANG_PM], &parameter[PITCH_ANG_IM], &parameter[PITCH_ANG_PM], &parameter[PITCH_ANG_OM],	\
 //																		 0, 0, 0, 0);
 //		controlData.pitchAnglePID = controlData.rollAnglePID;
 //		controlData.yawAnglePID =	  pidInit(&parameter[YAW_ANG_P], &parameter[YAW_ANG_I], &parameter[YAW_ANG_D], &parameter[YAW_ANG_F],	\
@@ -738,9 +738,9 @@ void ANO_DT_Data_Receive_Anl(u8 *data_buf,u8 num){
 		parameter[CHASSIS_CHASE_I] = 0.1*( (vs16)(*(data_buf+12)<<8)|*(data_buf+13) );
 		parameter[CHASSIS_CHASE_D] = 0.1*( (vs16)(*(data_buf+14)<<8)|*(data_buf+15) );
 	
-		parameter[PROPORTIONAL_SPEED_P] 	= 0.1*( (vs16)(*(data_buf+16)<<8)|*(data_buf+17) );
-		parameter[PROPORTIONAL_SPEED_I] 	= 0.1*( (vs16)(*(data_buf+18)<<8)|*(data_buf+19) );
-		parameter[PROPORTIONAL_SPEED_D] 	= 0.1*( (vs16)(*(data_buf+20)<<8)|*(data_buf+21) );
+//		parameter[PROPORTIONAL_SPEED_P] 	= 0.1*( (vs16)(*(data_buf+16)<<8)|*(data_buf+17) );
+//		parameter[PROPORTIONAL_SPEED_I] 	= 0.1*( (vs16)(*(data_buf+18)<<8)|*(data_buf+19) );
+//		parameter[PROPORTIONAL_SPEED_D] 	= 0.1*( (vs16)(*(data_buf+20)<<8)|*(data_buf+21) );
 		if(f.sendCheck == 0)
 		{
 			f.sendCheck = 1;
@@ -761,9 +761,9 @@ void ANO_DT_Data_Receive_Anl(u8 *data_buf,u8 num){
 	}
 	if(*(data_buf+2)==0X13)								//PID4
 	{
-		parameter[PROPORTIONAL_POS_P]  = 0.001*( (vs16)(*(data_buf+4)<<8)|*(data_buf+5) );
-		parameter[PROPORTIONAL_POS_I]  = 0.001*( (vs16)(*(data_buf+6)<<8)|*(data_buf+7) );
-		parameter[PROPORTIONAL_POS_D]  = 0.001*( (vs16)(*(data_buf+8)<<8)|*(data_buf+9) );
+//		parameter[PROPORTIONAL_POS_P]  = 0.001*( (vs16)(*(data_buf+4)<<8)|*(data_buf+5) );
+//		parameter[PROPORTIONAL_POS_I]  = 0.001*( (vs16)(*(data_buf+6)<<8)|*(data_buf+7) );
+//		parameter[PROPORTIONAL_POS_D]  = 0.001*( (vs16)(*(data_buf+8)<<8)|*(data_buf+9) );
 	
 		parameter[LOADED_SPEED_P]  = 0.001*( (vs16)(*(data_buf+10)<<8)|*(data_buf+11) );
 		parameter[LOADED_SPEED_I]  = 0.001*( (vs16)(*(data_buf+12)<<8)|*(data_buf+13) );
@@ -808,7 +808,7 @@ void dataTransportTask(void *Parameters){
 	
 }
 void wirelessInit(void){
-#ifdef ANO_DT_USE_USB_HID		//此处有bug，非测试请勿打开,待解决
+#ifdef ANO_DT_USE_USB_HID
 	usbVCP_Init(WIRELESS_VCP_PreemptionPriority,WIRELESS_VCP_SubPriority);
 #endif
 #ifdef ANO_DT_USE_UART7

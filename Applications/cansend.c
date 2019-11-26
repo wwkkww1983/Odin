@@ -65,7 +65,6 @@ void canSendShootUpdate(void){
 			break;
 		}
 		case BIG_LAUNCHER:{																															    //大发射机构
-			canSendData.can2_0x200.currunt3 = (short)shootData.turntableOut;									//筛弹电机，CAN2_03
 			canSendData.can2_0x200.currunt4 = (short)shootData.bigPokeSpeedOut;								//42mm拨弹电机，CAN2_04
 			break;
 		}
@@ -77,7 +76,6 @@ void canSendShootUpdate(void){
 				canSendData.can1_0x1FF.currunt4 = (short)supplyData.supplySpeedOut;								//17mm弹仓电机，CAN1_08
 			}
 			else if(parameter[ROBOT_TYPE] == TANK_ID){
-				canSendData.can2_0x200.currunt3 = (short)shootData.turntableOut;									//筛弹电机，CAN2_03
 				canSendData.can2_0x200.currunt4 = (short)shootData.bigPokeSpeedOut;								//42mm拨弹电机，CAN2_04
 			}
 			break;

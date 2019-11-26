@@ -222,11 +222,11 @@ void controlUpdateTask(void *Parameters){
 			if(judgeData.initFlag)
 				judgeTask();																											//裁判系统数据更新
 		}
-		if(supervisorData.state & STATE_SENSOR_ERROR)													//imu传感器错误则不继续执行
-			continue;
-		if(!supervisorData.taskEvent[SUPERVISOR_TASK])
-			continue;		
-		//必须在成功读取到机器人信息后才能执行初始化
+//		if(supervisorData.state & STATE_SENSOR_ERROR)													//imu传感器错误则不继续执行
+//			continue;
+//		if(!supervisorData.taskEvent[SUPERVISOR_TASK])
+//			continue;		
+//		//必须在成功读取到机器人信息后才能执行初始化
 		if(robotConfigData.distinguishState == ROBOT_COMPLETE_IDENTIFIED \
 			|| localIdData.distinguishState == ID_COMPLETE_IDENTIFIED){					
 			congtrolGlobalInit();																								//所有控制全部初始化，机器人有的结构进行初始化

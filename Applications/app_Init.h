@@ -7,6 +7,7 @@
 #define INIT_SIZE 1600
 
 typedef struct {
+	TaskHandle_t xHandleTask;	
 	EventGroupHandle_t eventGroups;
 }taskInit_t;
 

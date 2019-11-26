@@ -712,7 +712,6 @@ void shootUpdate(void){
 	shootData.fricWheelSpeedOut[1] = -pidUpdate( shootData.fricWheelSpeedPID[1], shootData.fricWheelSpeedRef[1], -fricWheelData[1].speed, shootData.intervalTime);			
 	shootData.turntableOut = pidUpdate( shootData.turntablePID, shootData.turntableRef*shootData.turntableStall , turntableData.speed, shootData.intervalTime);
 	//拨弹盘PID计算
-	shootData.bigPokeSpeedOut = pidUpdate( shootData.loadedSpeedPID, shootData.bigPokeSpeedRef*shootData.pokeStall, bigPokeData.speed, shootData.intervalTime);		
 
 	if(robotMode == MODE_RELAX||robotMode == MODE_STOP){																				//如果是释放控制权模式或停止模式
 	  shootData.fricWheelSpeedOut[0] = shootData.fricWheelSpeedOut[1] = 0;											//摩擦轮不开，拨弹电机也不开
@@ -738,12 +737,10 @@ void shootInit(void){
 	shootData.fricWheelSpeedPID[1]  = pidInit(&parameter[SHOOT_SPEED_P], &parameter[SHOOT_SPEED_I], &parameter[SHOOT_SPEED_D], &parameter[SHOOT_SPEED_F],	\
 													      &parameter[SHOOT_SPEED_PM], &parameter[SHOOT_SPEED_IM], &parameter[SHOOT_SPEED_DM], &parameter[SHOOT_SPEED_OM],	\
 													      NULL, NULL, NULL, NULL); 
-	shootData.turntablePID = 	pidInit(&parameter[DEFORM2_SPEED_P], &parameter[DEFORM2_SPEED_I], &parameter[DEFORM2_SPEED_D], &parameter[DEFORM2_SPEED_F],	\
-													      &parameter[DEFORM2_SPEED_PM], &parameter[DEFORM2_SPEED_IM], &parameter[DEFORM2_SPEED_DM], &parameter[DEFORM2_SPEED_OM],	\
+	shootData.turntablePID = 	pidInit(&parameter[ROLLBULL_SPEED_P], &parameter[ROLLBULL_SPEED_I], &parameter[ROLLBULL_SPEED_D], &parameter[ROLLBULL_SPEED_F],	\
+													      &parameter[ROLLBULL_SPEED_PM], &parameter[ROLLBULL_SPEED_IM], &parameter[ROLLBULL_SPEED_DM], &parameter[ROLLBULL_SPEED_OM],	\
 													      NULL, NULL, NULL, NULL);	
-	shootData.loadedSpeedPID = pidInit(&parameter[LOADED_SPEED_P], &parameter[LOADED_SPEED_I], &parameter[LOADED_SPEED_D], &parameter[LOADED_SPEED_F],	\
-															  &parameter[LOADED_SPEED_PM], &parameter[LOADED_SPEED_IM], &parameter[LOADED_SPEED_DM], &parameter[LOADED_SPEED_OM],	\
-															  NULL, NULL, NULL, NULL);
+	
 	digitalClan(&shootData.bulletRemain);
 	shootDataReset();
 	shootData.turntableStall = MOTOR_FOWARD;

@@ -269,15 +269,15 @@ void calibCalculate(void) {
 //    parameter[IMU_MAG_ALGN_ZX] = calibData.U[6];
 //    parameter[IMU_MAG_ALGN_ZY] = calibData.U[7];
 
-	calibFree:
+	calibFree:{}
 
 //    if (D.pData)
 //	aqFree(D.pData, 10*8*CALIB_SAMPLES, sizeof(float32_t));
 //    if (R.pData)
 //	aqFree(R.pData, 20*10, sizeof(float32_t));
-	for(uint8_t i = 0;i < 3;i++){
-		parameter[IMU_MAG_BIAS_X + i] = calibData.bias[i];	
-	}
+//	for(uint8_t i = 0;i < 3;i++){
+//		parameter[IMU_MAG_BIAS_X + i] = calibData.bias[i];	
+//	}
 }
 
 void calibFinished(void) {

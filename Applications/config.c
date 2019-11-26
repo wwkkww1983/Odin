@@ -7,14 +7,15 @@
 #include "tf_card_parameter.h"
 #include "type_robot.h"
 #include "supervisor.h"
-
+uint8_t dusd = 1;
+uint32_t sb = 1;
 float parameter[NUM_OF_LIST] __attribute__((section(".ccm")));
-float motormessage[ABOVE_TOTAL] __attribute__((section(".ccm")));
+//float motormessage[ABOVE_TOTAL] __attribute__((section(".ccm")));
 /*----------------------------
-== ´Ë´¦µÄÃüÃû²»¿É³¬¹ı16¸ö×Ö·û ==
+== ï¿½Ë´ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É³ï¿½ï¿½ï¿½16ï¿½ï¿½ï¿½Ö·ï¿½ ==
 ----------------------------*/
 const char *configParameterStrings[] = {
-	"CONFIG_VERSION",									//°æ±¾ºÅ
+	"CONFIG_VERSION",									//ç‰ˆæœ¬å·
 	"ROBOT_TYPE",
 	"DEAD_BAND",
 	"SHOOT_LOW_PWM",
@@ -25,24 +26,6 @@ const char *configParameterStrings[] = {
 	"CHASSIS_KB_SPEED",
 	"CHASSIS_RC_SPEED",
 	"CHASSIS_KB_ACC",
-	
-	"TILT_ANGLE_P",
-	"TILT_ANGLE_I",
-	"TILT_ANGLE_D",
-	"TILT_ANGLE_F",
-	"TILT_ANGLE_PM",
-	"TILT_ANGLE_IM",
-	"TILT_ANGLE_DM",
-	"TILT_ANGLE_OM",
-	
-	"TILT_RATE_P",
-	"TILT_RATE_I",
-	"TILT_RATE_D",
-	"TILT_RATE_F",
-	"TILT_RATE_PM",
-	"TILT_RATE_IM",
-	"TILT_RATE_DM",
-	"TILT_RATE_OM",
 	
 	"YAW_ANGLE_P",
 	"YAW_ANGLE_I",
@@ -61,6 +44,42 @@ const char *configParameterStrings[] = {
 	"YAW_RATE_IM",
 	"YAW_RATE_DM",
 	"YAW_RATE_OM",
+	
+	"PITCH_ANGLE_P",
+	"PITCH_ANGLE_I",
+	"PITCH_ANGLE_D",
+	"PITCH_ANGLE_F",
+	"PITCH_ANGLE_PM",
+	"PITCH_ANGLE_IM",
+	"PITCH_ANGLE_DM",
+	"PITCH_ANGLE_OM",
+	
+	"PITCH_RATE_P",
+	"PITCH_RATE_I",
+	"PITCH_RATE_D",
+	"PITCH_RATE_F",
+	"PITCH_RATE_PM",
+	"PITCH_RATE_IM",
+	"PITCH_RATE_DM",
+	"PITCH_RATE_OM",
+	
+	"ROLL_ANGLE_P",
+	"ROLL_ANGLE_I",
+	"ROLL_ANGLE_D",
+	"ROLL_ANGLE_F",
+	"ROLL_ANGLE_PM",
+	"ROLL_ANGLE_IM",
+	"ROLL_ANGLE_DM",
+	"ROLL_ANGLE_OM",
+	
+	"ROLL_RATE_P",
+	"ROLL_RATE_I",
+	"ROLL_RATE_D",
+	"ROLL_RATE_F",
+	"ROLL_RATE_PM",
+	"ROLL_RATE_IM",
+	"ROLL_RATE_DM",
+	"ROLL_RATE_OM",
 	
 	"CHASSIS_SPEED_P",
 	"CHASSIS_SPEED_I",
@@ -89,7 +108,7 @@ const char *configParameterStrings[] = {
 	"CHASSIS_CHASE_DM",
 	"CHASSIS_CHASE_OM",
 	
-	"CHASSIS_RATE_P",								//µ×ÅÌ¸úËæ½ÇËÙ¶È»·²ÎÊı  IMU·´À¡½ÇËÙ¶È±Õ»·
+	"CHASSIS_RATE_P",								//åº•ç›˜è·Ÿéšè§’é€Ÿåº¦ç¯å‚æ•°  IMUåé¦ˆè§’é€Ÿåº¦é—­ç¯
 	"CHASSIS_RATE_I",
 	"CHASSIS_RATE_D",
 	"CHASSIS_RATE_F",
@@ -106,52 +125,7 @@ const char *configParameterStrings[] = {
 	"POWER_LIMIT_IM",
 	"POWER_LIMIT_DM",
 	"POWER_LIMIT_OM",
-	
-	"PRO_SPEED_P",
-	"PRO_SPEED_I",
-	"PRO_SPEED_D",
-	"PRO_SPEED_F",
-	"PRO_SPEED_PM",
-	"PRO_SPEED_IM",
-	"PRO_SPEED_DM",
-	"PRO_SPEED_OM",
-	
-	"PRO_POS_P",
-	"PRO_POS_I",
-	"PRO_POS_D",
-	"PRO_POS_F",
-	"PRO_POS_PM",
-	"PRO_POS_IM",
-	"PRO_POS_DM",
-	"PRO_POS_OM",
-	
-	"HOLD_SPEED_P",									
-	"HOLD_SPEED_I",
-	"HOLD_SPEED_D",
-	"HOLD_SPEED_F",
-	"HOLD_SPEED_FM",
-	"HOLD_SPEED_IM",
-	"HOLD_SPEED_DM",
-	"HOLD_SPEED_OM",
-	
-	"DEFORM1_SPEED_P",				
-	"DEFORM1_SPEED_I",
-	"DEFORM1_SPEED_D",
-	"DEFORM1_SPEED_F",
-	"DEFORM1_SPEED_PM",
-	"DEFORM1_SPEED_IM",
-	"DEFORM1_SPEED_DM",
-	"DEFORM1_SPEED_OM",
-	
-	"DEFORM2_SPEED_P",				
-	"DEFORM2_SPEED_I",
-	"DEFORM2_SPEED_D",
-	"DEFORM2_SPEED_F",
-	"DEFORM2_SPEED_PM",
-	"DEFORM2_SPEED_IM",
-	"DEFORM2_SPEED_DM",
-	"DEFORM2_SPEED_OM",
-	
+
 	"SHOOT_SPEED_P",
 	"SHOOT_SPEED_I",
 	"SHOOT_SPEED_D",
@@ -169,42 +143,29 @@ const char *configParameterStrings[] = {
 	"LOADED_SPEED_IM",
 	"LOADED_SPEED_DM",
 	"LOADED_SPEED_OM",
-	
-	"ADRC_R",
-	"ADRC_H",
-	"ADRC_N0",
-	"ADRC_BETA01",
-	"ADRC_BETA02",
-	"ADRC_BETA03",
-	"ADRC_B0",
-	"ADRC_BETA0",
-	"ADRC_BETA1",
-	"ADRC_BETA2",
-	"ADRC_N1",
-	"ADRC_C",
-	"ADRC_ALPHA1",
-	"ADRC_ALPHA2",
-	"ADRC_ZETA",
-	"ADRC_B",
-	"ADRC_OMAX",
-/*----------------		ÒÔÏÂ²ÎÊı´æ´¢µ½TF¿¨ÁíÒ»¸öÎÄ¼ş	£¨motorÎÄ¼ş£©		----------------*/
+/*----------------		ä»¥ä¸‹å‚æ•°å­˜å‚¨åˆ°TFå¡å¦ä¸€ä¸ªæ–‡ä»¶	ï¼ˆmotoræ–‡ä»¶ï¼‰		----------------*/
 	"LOCAL_ID",
 	"WEAPON_TYPE",
-	"PITCH_INSTALL",
 	"YAW_INSTALL",
+	"PITCH_INSTALL",
+	"ROLL_INSTALL",
 	"BACK_CENTER_TIME",
 	"CHASSIS_CURRENT",
 	"RC_RESOLUTION",
 	"YAW_CENTER",	
 	"PITCH_CENTER",
+	"ROLL_CENTER",
 	"PITCH_MIN_RANGE",
 	"PITCH_MAX_RANGE",
 	"YAW_TYPE",       
 	"PITCH_TYPE",
+	"ROLL_TYPE",
 	"YAW_FIX",
 	"YAW_TURN",
 	"PITCH_FIX",
 	"PITCH_TURN",
+	"ROLL_FIX",
+	"ROLL_TURN",
 	"IMU_ACC_BIAS_X",
 	"IMU_ACC_BIAS_Y",
 	"IMU_ACC_BIAS_Z",
@@ -216,26 +177,26 @@ const char *configParameterStrings[] = {
 	"IMU_GYO_BIAS_Z",
 };
 
-const char *configMotorStrings[] = {   //µç»úÅäÖÃÎÄ¼ş         /*************²âÊÔ*************/
-  "ROBOT_ID",                //»úÆ÷ÈËÖÖÀà               
-	"NATIVE_ID",              //Ö÷¸±¿ØID  Í¬LOCAL_ID ÏÂÍ¬
-	"ARMS_TYPE",              //ÎäÆ÷ÀàĞÍ
-	"PITCH_ORIENT",           //pitchÖá×Ü·½Ïò
-	"YAW_ORIENT",             //yawÖá×Ü·½Ïò
-	"RETURN_TIME",            //»ØÖĞÊ±¼ä
-	"CHASSIS_POWER",          //µ×ÅÌ×î´ó¹¦ÂÊ
-	"RC_RATIO",               //Ò£¿ØÆ÷×î´óÖµ
-	"YAW_MIDDLE",             //yawÖáÖĞ¼äÎ»ÖÃ 
-	"PITCH_MIDDLE",           //pitchÖáÖĞ¼äÎ»ÖÃ
-	"PITCH_MIN_SEAT",         //piychÖá×î´ó½Ç¶È 
-	"PITCH_MAX_SEAT",         //pitchÖá×îĞ¡½Ç¶È
-	"YAW_ID",                 //yawÖáµç»úÖÖÀà
-  "PITCH_ID",               //pitchÖáµç»úÖÖÀà          
-  "YAW_FASTEN",             //yawÖáµç»ú°²×°·½Ïò        
-	"YAW_SPIN",               //yawÖáĞı×ª·½Ïò
-	"PITCH_FASTEN",            //pitchÖáµç»ú°²×°·½Ïò      
-	"PITCH_SPIN",              //pitchÖáĞı×ª·½Ïò  
-  "IMU_ACC_INIT_X",
+const char *configMotorStrings[] = {   //ç”µæœºé…ç½®æ–‡ä»¶         /*************æµ‹è¯•*************/
+ "ROBOT_ID",                //æœºå™¨äººç§ç±»               
+	"NATIVE_ID",              //ä¸»å‰¯æ§ID  åŒLOCAL_ID ä¸‹åŒ
+	"ARMS_TYPE",              //æ­¦å™¨ç±»å‹
+	"PITCH_ORIENT",           //pitchè½´æ€»æ–¹å‘
+	"YAW_ORIENT",             //yawè½´æ€»æ–¹å‘
+	"RETURN_TIME",            //å›ä¸­æ—¶é—´
+	"CHASSIS_POWER",          //åº•ç›˜æœ€å¤§åŠŸç‡
+	"RC_RATIO",               //é¥æ§å™¨æœ€å¤§å€¼
+	"YAW_MIDDLE",             //yawè½´ä¸­é—´ä½ç½® 
+	"PITCH_MIDDLE",           //pitchè½´ä¸­é—´ä½ç½®
+	"PITCH_MIN_SEAT",         //piychè½´æœ€å¤§è§’åº¦ 
+	"PITCH_MAX_SEAT",         //pitchè½´æœ€å°è§’åº¦
+	"YAW_ID",                 //yawè½´ç”µæœºç§ç±»
+	"PITCH_ID",               //pitchè½´ç”µæœºç§ç±»          
+	"YAW_FASTEN",             //yawè½´ç”µæœºå®‰è£…æ–¹å‘        
+	"YAW_SPIN",               //yawè½´æ—‹è½¬æ–¹å‘
+	"PITCH_FASTEN",            //pitchè½´ç”µæœºå®‰è£…æ–¹å‘      
+	"PITCH_SPIN",              //pitchè½´æ—‹è½¬æ–¹å‘  
+	"IMU_ACC_INIT_X",
 	"IMU_ACC_INIT_Y",
 	"IMU_ACC_INIT_Z",
 	"IMU_MAG_INIT_X",
@@ -246,7 +207,7 @@ const char *configMotorStrings[] = {   //µç»úÅäÖÃÎÄ¼ş         /*************²âÊÔ
 	"IMU_GYO_INIT_Z",
 };
 
-void configLoadDefault(void){	
+void configLoadDefault(void){
 	parameter[CONFIG_VERSION] = DEFAULT_CONFIG_VERSION;
 	parameter[ROBOT_TYPE] = DEFAULT_ROBOT_TYPE;
 	parameter[DEAD_BAND] = DEFAULT_DEAD_BAND;
@@ -258,24 +219,6 @@ void configLoadDefault(void){
 	parameter[CHASSIS_KB_SPEED] = DEFAULT_CHASSIS_KB_SPEED;
 	parameter[CHASSIS_RC_SPEED] = DEFAULT_CHASSIS_RC_SPEED;
 	parameter[CHASSIS_KB_ACC] = DEFAULT_CHASSIS_KB_ACC;
-	
-	parameter[TILT_ANG_P] = DEFAULT_TILT_ANGLE_P;
-	parameter[TILT_ANG_I] = DEFAULT_TILT_ANGLE_I;
-	parameter[TILT_ANG_D] = DEFAULT_TILT_ANGLE_D;
-	parameter[TILT_ANG_F] = DEFAULT_TILT_ANGLE_F;
-	parameter[TILT_ANG_PM] = DEFAULT_TILT_ANGLE_PM;
-	parameter[TILT_ANG_IM] = DEFAULT_TILT_ANGLE_IM;
-	parameter[TILT_ANG_DM] = DEFAULT_TILT_ANGLE_DM;
-	parameter[TILT_ANG_OM] = DEFAULT_TILT_ANGLE_OM;
-	
-	parameter[TILT_RATE_P] = DEFAULT_TILT_RATE_P;
-	parameter[TILT_RATE_I] = DEFAULT_TILT_RATE_I;
-	parameter[TILT_RATE_D] = DEFAULT_TILT_RATE_D;
-	parameter[TILT_RATE_F] = DEFAULT_TILT_RATE_F;
-	parameter[TILT_RATE_PM] = DEFAULT_TILT_RATE_PM;
-	parameter[TILT_RATE_IM] = DEFAULT_TILT_RATE_IM;
-	parameter[TILT_RATE_DM] = DEFAULT_TILT_RATE_DM;
-	parameter[TILT_RATE_OM] = DEFAULT_TILT_RATE_OM;
 	
 	parameter[YAW_ANG_P] = DEFAULT_YAW_ANGLE_P;
 	parameter[YAW_ANG_I] = DEFAULT_YAW_ANGLE_I;
@@ -294,6 +237,42 @@ void configLoadDefault(void){
 	parameter[YAW_RATE_IM] = DEFAULT_YAW_RATE_IM;
 	parameter[YAW_RATE_DM] = DEFAULT_YAW_RATE_DM;
 	parameter[YAW_RATE_OM] = DEFAULT_YAW_RATE_OM;
+	
+	parameter[PITCH_ANG_P] = DEFAULT_PITCH_ANGLE_P;
+	parameter[PITCH_ANG_I] = DEFAULT_PITCH_ANGLE_I;
+	parameter[PITCH_ANG_D] = DEFAULT_PITCH_ANGLE_D;
+	parameter[PITCH_ANG_F] = DEFAULT_PITCH_ANGLE_F;
+	parameter[PITCH_ANG_PM] = DEFAULT_PITCH_ANGLE_PM;
+	parameter[PITCH_ANG_IM] = DEFAULT_PITCH_ANGLE_IM;
+	parameter[PITCH_ANG_DM] = DEFAULT_PITCH_ANGLE_DM;
+	parameter[PITCH_ANG_OM] = DEFAULT_PITCH_ANGLE_OM;
+	
+	parameter[PITCH_RATE_P] = DEFAULT_PITCH_RATE_P;
+	parameter[PITCH_RATE_I] = DEFAULT_PITCH_RATE_I;
+	parameter[PITCH_RATE_D] = DEFAULT_PITCH_RATE_D;
+	parameter[PITCH_RATE_F] = DEFAULT_PITCH_RATE_F;
+	parameter[PITCH_RATE_PM] = DEFAULT_PITCH_RATE_PM;
+	parameter[PITCH_RATE_IM] = DEFAULT_PITCH_RATE_IM;
+	parameter[PITCH_RATE_DM] = DEFAULT_PITCH_RATE_DM;
+	parameter[PITCH_RATE_OM] = DEFAULT_PITCH_RATE_OM;
+	
+	parameter[ROLL_ANG_P] = DEFAULT_ROLL_ANGLE_P;
+	parameter[ROLL_ANG_I] = DEFAULT_ROLL_ANGLE_I;
+	parameter[ROLL_ANG_D] = DEFAULT_ROLL_ANGLE_D;
+	parameter[ROLL_ANG_F] = DEFAULT_ROLL_ANGLE_F;
+	parameter[ROLL_ANG_PM] = DEFAULT_ROLL_ANGLE_PM;
+	parameter[ROLL_ANG_IM] = DEFAULT_ROLL_ANGLE_IM;
+	parameter[ROLL_ANG_DM] = DEFAULT_ROLL_ANGLE_DM;
+	parameter[ROLL_ANG_OM] = DEFAULT_ROLL_ANGLE_OM;
+	
+	parameter[ROLL_RATE_P] = DEFAULT_ROLL_RATE_P;
+	parameter[ROLL_RATE_I] = DEFAULT_ROLL_RATE_I;
+	parameter[ROLL_RATE_D] = DEFAULT_ROLL_RATE_D;
+	parameter[ROLL_RATE_F] = DEFAULT_ROLL_RATE_F;
+	parameter[ROLL_RATE_PM] = DEFAULT_ROLL_RATE_PM;
+	parameter[ROLL_RATE_IM] = DEFAULT_ROLL_RATE_IM;
+	parameter[ROLL_RATE_DM] = DEFAULT_ROLL_RATE_DM;
+	parameter[ROLL_RATE_OM] = DEFAULT_ROLL_RATE_OM;
 	
 	parameter[CHASSIS_SPEED_P] = DEFAULT_CHASSIS_SPEED_P;
 	parameter[CHASSIS_SPEED_I] = DEFAULT_CHASSIS_SPEED_I;
@@ -322,7 +301,7 @@ void configLoadDefault(void){
 	parameter[CHASSIS_CHASE_DM] = DEFAULT_CHASSIS_CHASE_DM;
 	parameter[CHASSIS_CHASE_OM] = DEFAULT_CHASSIS_CHASE_OM;	
 	
-	parameter[CHASSIS_RATE_P] = DEFAULT_CHASSIS_RATE_P;								//µ×ÅÌ¸úËæ½ÇËÙ¶È»·²ÎÊı
+	parameter[CHASSIS_RATE_P] = DEFAULT_CHASSIS_RATE_P;								//åº•ç›˜è·Ÿéšè§’é€Ÿåº¦ç¯å‚æ•°
 	parameter[CHASSIS_RATE_I] = DEFAULT_CHASSIS_RATE_I;
 	parameter[CHASSIS_RATE_D] = DEFAULT_CHASSIS_RATE_D;
 	parameter[CHASSIS_RATE_F] = DEFAULT_CHASSIS_RATE_F;
@@ -340,51 +319,6 @@ void configLoadDefault(void){
 	parameter[POWER_LIMIT_DM] = DEFAULT_POWER_LIMIT_DM;
 	parameter[POWER_LIMIT_OM] = DEFAULT_POWER_LIMIT_OM;	
 	
-	parameter[PROPORTIONAL_SPEED_P] = DEFAULT_PROPORTIONAL_SPEED_P;
-	parameter[PROPORTIONAL_SPEED_I] = DEFAULT_PROPORTIONAL_SPEED_I;
-	parameter[PROPORTIONAL_SPEED_D] = DEFAULT_PROPORTIONAL_SPEED_D;
-	parameter[PROPORTIONAL_SPEED_F] = DEFAULT_PROPORTIONAL_SPEED_F;
-	parameter[PROPORTIONAL_SPEED_PM] = DEFAULT_PROPORTIONAL_SPEED_PM;
-	parameter[PROPORTIONAL_SPEED_IM] = DEFAULT_PROPORTIONAL_SPEED_IM;
-	parameter[PROPORTIONAL_SPEED_DM] = DEFAULT_PROPORTIONAL_SPEED_DM;
-	parameter[PROPORTIONAL_SPEED_OM] = DEFAULT_PROPORTIONAL_SPEED_OM;	
-	
-	parameter[PROPORTIONAL_POS_P] = DEFAULT_PROPORTIONAL_POS_P;
-	parameter[PROPORTIONAL_POS_I] = DEFAULT_PROPORTIONAL_POS_I;
-	parameter[PROPORTIONAL_POS_D] = DEFAULT_PROPORTIONAL_POS_D;
-	parameter[PROPORTIONAL_POS_F] = DEFAULT_PROPORTIONAL_POS_F;
-	parameter[PROPORTIONAL_POS_PM] = DEFAULT_PROPORTIONAL_POS_PM;
-	parameter[PROPORTIONAL_POS_IM] = DEFAULT_PROPORTIONAL_POS_IM;
-	parameter[PROPORTIONAL_POS_DM] = DEFAULT_PROPORTIONAL_POS_DM;
-	parameter[PROPORTIONAL_POS_OM] = DEFAULT_PROPORTIONAL_POS_OM;	
-	
-	parameter[HOLD_PILLAR_SPEED_P] = DEFAULT_HOLD_PILLAR_SPEED_P;
-	parameter[HOLD_PILLAR_SPEED_I] = DEFAULT_HOLD_PILLAR_SPEED_I;
-	parameter[HOLD_PILLAR_SPEED_D] = DEFAULT_HOLD_PILLAR_SPEED_D;
-	parameter[HOLD_PILLAR_SPEED_F] = DEFAULT_HOLD_PILLAR_SPEED_F;
-	parameter[HOLD_PILLAR_SPEED_PM] = DEFAULT_HOLD_PILLAR_SPEED_PM;
-	parameter[HOLD_PILLAR_SPEED_IM] = DEFAULT_HOLD_PILLAR_SPEED_IM;
-	parameter[HOLD_PILLAR_SPEED_DM] = DEFAULT_HOLD_PILLAR_SPEED_DM;
-	parameter[HOLD_PILLAR_SPEED_OM] = DEFAULT_HOLD_PILLAR_SPEED_OM;	
-	
-	parameter[DEFORM1_SPEED_P] = DEFAULT_DEFORM1_SPEED_P;
-	parameter[DEFORM1_SPEED_I] = DEFAULT_DEFORM1_SPEED_I;
-	parameter[DEFORM1_SPEED_D] = DEFAULT_DEFORM1_SPEED_D;
-	parameter[DEFORM1_SPEED_F] = DEFAULT_DEFORM1_SPEED_F;
-	parameter[DEFORM1_SPEED_PM] = DEFAULT_DEFORM1_SPEED_PM;
-	parameter[DEFORM1_SPEED_IM] = DEFAULT_DEFORM1_SPEED_IM;
-	parameter[DEFORM1_SPEED_DM] = DEFAULT_DEFORM1_SPEED_DM;
-	parameter[DEFORM1_SPEED_OM] = DEFAULT_DEFORM1_SPEED_OM;
-	
-	parameter[DEFORM2_SPEED_P] = DEFAULT_DEFORM2_SPEED_P;
-	parameter[DEFORM2_SPEED_I] = DEFAULT_DEFORM2_SPEED_I;
-	parameter[DEFORM2_SPEED_D] = DEFAULT_DEFORM2_SPEED_D;
-	parameter[DEFORM2_SPEED_F] = DEFAULT_DEFORM2_SPEED_F;
-	parameter[DEFORM2_SPEED_PM] = DEFAULT_DEFORM2_SPEED_PM;
-	parameter[DEFORM2_SPEED_IM] = DEFAULT_DEFORM2_SPEED_IM;
-	parameter[DEFORM2_SPEED_DM] = DEFAULT_DEFORM2_SPEED_DM;
-	parameter[DEFORM2_SPEED_OM] = DEFAULT_DEFORM2_SPEED_OM;
-	
 	parameter[SHOOT_SPEED_P] = DEFAULT_SHOOT_SPEED_P;
 	parameter[SHOOT_SPEED_I] = DEFAULT_SHOOT_SPEED_I;
 	parameter[SHOOT_SPEED_D] = DEFAULT_SHOOT_SPEED_D;
@@ -393,6 +327,16 @@ void configLoadDefault(void){
 	parameter[SHOOT_SPEED_IM] = DEFAULT_SHOOT_SPEED_IM;
 	parameter[SHOOT_SPEED_DM] = DEFAULT_SHOOT_SPEED_DM;
 	parameter[SHOOT_SPEED_OM] = DEFAULT_SHOOT_SPEED_OM;	
+	
+	parameter[ROLLBULL_SPEED_P] = DEFAULT_ROLLBULL_SPEED_P;
+	parameter[ROLLBULL_SPEED_I] = DEFAULT_ROLLBULL_SPEED_I;
+	parameter[ROLLBULL_SPEED_D] = DEFAULT_ROLLBULL_SPEED_D;
+	parameter[ROLLBULL_SPEED_F] = DEFAULT_ROLLBULL_SPEED_F;
+	parameter[ROLLBULL_SPEED_PM] = DEFAULT_ROLLBULL_SPEED_PM;
+	parameter[ROLLBULL_SPEED_IM] = DEFAULT_ROLLBULL_SPEED_IM;
+	parameter[ROLLBULL_SPEED_DM] = DEFAULT_ROLLBULL_SPEED_DM;
+	parameter[ROLLBULL_SPEED_OM] = DEFAULT_ROLLBULL_SPEED_OM;
+	
 	
 	parameter[LOADED_SPEED_P] = DEFAULT_LOADED_SPEED_P;
 	parameter[LOADED_SPEED_I] = DEFAULT_LOADED_SPEED_I;
@@ -403,51 +347,30 @@ void configLoadDefault(void){
 	parameter[LOADED_SPEED_DM] = DEFAULT_LOADED_SPEED_DM;
 	parameter[LOADED_SPEED_OM] = DEFAULT_LOADED_SPEED_OM;			
 	
-	parameter[ADRC_R] = DEFAULT_ADRC_R;						
-	parameter[ADRC_H] = DEFAULT_ADRC_H;						
-	parameter[ADRC_N0] = DEFAULT_ADRC_N0;					
-	parameter[ADRC_BETA01] = DEFAULT_ADRC_BETA01;	
-	parameter[ADRC_BETA02] = DEFAULT_ADRC_BETA02;	
-	parameter[ADRC_BETA03] = DEFAULT_ADRC_BETA03;	
-	parameter[ADRC_B0] = DEFAULT_ADRC_B0;					
-	parameter[ADRC_BETA0] = DEFAULT_ADRC_BETA0;		
-	parameter[ADRC_BETA1] = DEFAULT_ADRC_BETA1;		
-	parameter[ADRC_BETA02] = DEFAULT_ADRC_BETA2;	
-	parameter[ADRC_N1] = DEFAULT_ADRC_N1;					
-	parameter[ADRC_C] = DEFAULT_ADRC_C;						
-	parameter[ADRC_ALPHA1] = DEFAULT_ADRC_ALPHA1;	
-	parameter[ADRC_ALPHA2] = DEFAULT_ADRC_ALPHA2;	
-	parameter[ADRC_ZETA] = DEFAULT_ADRC_ZETA;			
-	parameter[ADRC_B] = DEFAULT_ADRC_B;						
-	parameter[ADRC_OMAX] = DEFAULT_ADRC_OMAX;			
-	
-/*----------------	ÒÔÏÂ²ÎÊı´æ´¢µ½TF¿¨ÁíÒ»¸öÎÄ¼ş	£¨motorÎÄ¼ş£©	----------------*/
+/*----------------	ä»¥ä¸‹å‚æ•°å­˜å‚¨åˆ°TFå¡å¦ä¸€ä¸ªæ–‡ä»¶	ï¼ˆmotoræ–‡ä»¶ï¼‰	----------------*/
 	parameter[LOCAL_ID] = DEFAULT_LOCAL_ID;											
-	parameter[WEAPON_TYPE] = DEFAULT_WEAPON_TYPE;								
+	parameter[WEAPON_TYPE] = DEFAULT_WEAPON_TYPE;
+	parameter[YAW_INSTALL] = DEFAULT_YAW_INSTALL;										
 	parameter[PITCH_INSTALL] = DEFAULT_PITCH_INSTALL;				
-	parameter[YAW_INSTALL] = DEFAULT_YAW_INSTALL;			
+	parameter[ROLL_INSTALL] = DEFAULT_ROLL_INSTALL;			
 	parameter[BACK_CENTER_TIME] = DEFAULT_BACK_CENTER_TIME;			
 	parameter[CHASSIS_CURRENT] = DEFAULT_CHASSIS_CURRENT;				
 	parameter[RC_RESOLUTION] = DEFAULT_RC_RESOLUTION;						
 	parameter[YAW_CENTER] = DEFAULT_YAW_CENTER;								
-	parameter[PITCH_CENTER] = DEFAULT_PITCH_CENTER;														
+	parameter[PITCH_CENTER] = DEFAULT_PITCH_CENTER;				
+	parameter[ROLL_CENTER] = DEFAULT_ROLL_CENTER;			
 	parameter[PITCH_MIN_RANGE] = DEFAULT_PITCH_MIN_RANGE;				
 	parameter[PITCH_MAX_RANGE] = DEFAULT_PITCH_MAX_RANGE;
   parameter[YAW_TYPE] =	DEFAULT_YAW_TYPE;
 	parameter[PITCH_TYPE] =	DEFAULT_PITCH_TYPE; 
+	parameter[ROLL_TYPE] =	DEFAULT_ROLL_TYPE; 
 	parameter[YAW_FIX] =	DEFAULT_YAW_FIX;
 	parameter[YAW_TURN] =	DEFAULT_YAW_TURN;
 	parameter[PITCH_FIX] =	DEFAULT_PITCH_FIX; 
 	parameter[PITCH_TURN] =	DEFAULT_PITCH_TURN;
-	parameter[IMU_ACC_BIAS_X] = DEFAULT_IMU_ACC_BIAS_X;					
-	parameter[IMU_ACC_BIAS_Y] = DEFAULT_IMU_ACC_BIAS_Y;					
-	parameter[IMU_ACC_BIAS_Z] = DEFAULT_IMU_ACC_BIAS_Z;					
-	parameter[IMU_MAG_BIAS_X] = DEFAULT_IMU_MAG_BIAS_X;					
-	parameter[IMU_MAG_BIAS_Y] = DEFAULT_IMU_MAG_BIAS_Y;					
-	parameter[IMU_MAG_BIAS_Z] = DEFAULT_IMU_MAG_BIAS_Z;					
-	parameter[IMU_GYO_BIAS_X] = DEFAULT_IMU_GYO_BIAS_X;					
-	parameter[IMU_GYO_BIAS_Y] = DEFAULT_IMU_GYO_BIAS_Y;					
-	parameter[IMU_GYO_BIAS_Z] = DEFAULT_IMU_GYO_BIAS_Z;				
+	parameter[ROLL_FIX] =	DEFAULT_ROLL_FIX; 
+	parameter[ROLL_TURN] =	DEFAULT_ROLL_TURN;			
+
 }
 
 
@@ -474,13 +397,13 @@ configToken_t *configTokenGet(uint32_t key) {
 	} while (p->key != 0xffffffff);
 	return t;
 }
-/*------------------- ÅäÖÃFLASH¶ÁÈ¡ ---------------------*/
+/*------------------- é…ç½®FLASHè¯»å– ---------------------*/
 void configFlashRead(void) {
 	configRec_t *recs;
 	int i, j;
 	recs = (void *)flashStartAddr();
 	for (i = 0; i < NUM_OF_LIST; i++) {
-		for (j = 0; j < NUM_OF_LIST; j++)																							//Ä¿µÄÊÇ¶ÔÁ½¸ö±äÁ¿µÄÃû³Æ½øĞĞ¶Ô±È£¬Ãû³ÆÒ»ÖÂÔò¶ÁÈ¡flashËù´øµÄÖµ
+		for (j = 0; j < NUM_OF_LIST; j++)																							//ç›®çš„æ˜¯å¯¹ä¸¤ä¸ªå˜é‡çš„åç§°è¿›è¡Œå¯¹æ¯”ï¼Œåç§°ä¸€è‡´åˆ™è¯»å–flashæ‰€å¸¦çš„å€¼
 			if (!strncasecmp(recs[i].name, configParameterStrings[j], 16))					
 				parameter[j] = recs[i].val;															
 	}
@@ -495,7 +418,7 @@ configToken_t *configTokenIterate(configToken_t *t) {
 	else
 		return 0;
 }
-/*------------------- ÅäÖÃFLASHĞ´Èë ---------------------*/
+/*------------------- é…ç½®FLASHå†™å…¥ ---------------------*/
 uint8_t configFlashWrite(void) {
 	configRec_t *recs;
 	uint8_t ret = 0;
@@ -504,10 +427,10 @@ uint8_t configFlashWrite(void) {
 	if (recs) {
 		configToken_t *tr = (configToken_t *)recs;
 		configToken_t *tf = 0;																			
-		do {																									//¶ÁÈ¡ËùÓĞÁîÅÆ
-			tf = configTokenIterate(tf);												//¸´ÖÆµ½RAM							
+		do {																									//è¯»å–æ‰€æœ‰ä»¤ç‰Œ
+			tf = configTokenIterate(tf);												//å¤åˆ¶åˆ°RAM							
 			if (tf) {																														
-				do {																							//Ã¿¸öÁîÅÆÖ»ÓĞÒ»¸ö²ÎÊı
+				do {																							//æ¯ä¸ªä»¤ç‰Œåªæœ‰ä¸€ä¸ªå‚æ•°
 					if (tr->key == 0 || tr->key == tf->key) {
 						memcpy(tr, tf, sizeof(configToken_t));
 						break;
@@ -517,16 +440,16 @@ uint8_t configFlashWrite(void) {
 			}
 		} while (tf);
 		ret = flashErase(flashStartAddr(), NUM_OF_LIST*sizeof(configRec_t)/sizeof(uint32_t));							
-		FLASH_DataCacheCmd(DISABLE);													//Ê¹ÉÁ´æÊı¾İ»º´æÎŞĞ§			
+		FLASH_DataCacheCmd(DISABLE);													//ä½¿é—ªå­˜æ•°æ®ç¼“å­˜æ— æ•ˆ			
 		FLASH_DataCacheReset();
 		FLASH_DataCacheCmd(ENABLE);
 		if (ret) {
 			tr = (configToken_t *)recs;												
-			while (tr->key)																			//½«ÁîÅÆ¸´ÖÆ»ØÉÁ´æ
+			while (tr->key)																			//å°†ä»¤ç‰Œå¤åˆ¶å›é—ªå­˜
 				configTokenStore(tr++);																		
-			for (i = 0; i < NUM_OF_LIST; i++) {									//ÔÚÄÚ´æÖĞ´´½¨²ÎÊıÁĞ±í
-				memcpy(recs[i].name, configParameterStrings[i], 16);				//¸´ÖÆÁîÅÆ
-				recs[i].val = parameter[i];												//²ÎÊı´«²Î
+			for (i = 0; i < NUM_OF_LIST; i++) {									//åœ¨å†…å­˜ä¸­åˆ›å»ºå‚æ•°åˆ—è¡¨
+				memcpy(recs[i].name, configParameterStrings[i], 16);				//å¤åˆ¶ä»¤ç‰Œ
+				recs[i].val = parameter[i];												//å‚æ•°ä¼ å‚
 			}
 			ret = flashAddress(flashStartAddr(), (uint32_t *)recs, NUM_OF_LIST*sizeof(configRec_t)/sizeof(uint32_t));
 		}
@@ -540,31 +463,28 @@ uint8_t configFlashWrite(void) {
 void configInit(void) {
 	float ver;	
 	uint8_t tfRec;	
-	configFlashRead();																															//´ÓFlashÖĞ¿ªÊ¼
-  writeMotormessage();                                                            //½«´ÓflashÀïÃæ¶Á³öÀ´Êı¾İĞ´µ½TF¿¨µÄÊı×éÀïÃæ
+	configFlashRead();																															//ä»Flashä¸­å¼€å§‹
 	
-	tfRec = tFCardConfig();																													//¼ÓÔØtf¿¨µÄÅäÖÃ
+	tfRec = tFCardConfig();																													//åŠ è½½tfå¡çš„é…ç½®
+	dusd = tfRec;
 	if(!tfRec && parameter[ROBOT_TYPE] > NO_ID){
-		parameterReadDataFromTFCard(parameter[ROBOT_TYPE]);                           //´ÓTF¿¨Àï¶ÁPID²ÎÊı
-    motorMessageReadDataFromTFCard(parameter[ROBOT_TYPE]);                        //´ÓTF¿¨ÀïÃæ¶Áµç»úÅäÖÃ²ÎÊı
-	  readMotormessage();
+		parameterReadDataFromTFCard(parameter[ROBOT_TYPE]);                           //ä»TFå¡é‡Œè¯»PIDå‚æ•°
 	}
-	ver = *(float *)(flashStartAddr()+16);																					//¶ÁÈ¡µ±Ç°flash°æ±¾
+	ver = *(float *)(flashStartAddr()+16);																					//è¯»å–å½“å‰flashç‰ˆæœ¬
+	sb = ver;
 	if (isnan(ver))
 		ver = 0.0f;
-																																									//Èç¹û±àÒëµÄÄ¬ÈÏÖµ´óÓÚflash°æ±¾ºÍ¼ÓÔØ°æ±¾
-	if (DEFAULT_CONFIG_VERSION > ver && DEFAULT_CONFIG_VERSION > parameter[CONFIG_VERSION]){
-		configLoadDefault();																													//¼ÓÔØÄ¬ÈÏÖµ
+																																									//å¦‚æœç¼–è¯‘çš„é»˜è®¤å€¼å¤§äºflashç‰ˆæœ¬å’ŒåŠ è½½ç‰ˆæœ¬
+	if (DEFAULT_CONFIG_VERSION > ver || DEFAULT_CONFIG_VERSION > parameter[CONFIG_VERSION]){
+		configLoadDefault();																													//åŠ è½½é»˜è®¤å€¼
 		digitalHi(&supervisorData.flashSave);	
 	}
-	else if (ver >= parameter[CONFIG_VERSION]){  //Èç¹ûflash°æ±¾´óÓÚµ±Ç°»òµÈÓÚµ±Ç°°æ±¾
-	  configFlashRead();																														//¶ÁÈ¡flash		
-    writeMotormessage();	
+	else if (ver >= parameter[CONFIG_VERSION]){  //å¦‚æœflashç‰ˆæœ¬å¤§äºå½“å‰æˆ–ç­‰äºå½“å‰ç‰ˆæœ¬
+	  configFlashRead();																														//è¯»å–flash		
 	}																			
-	else if (parameter[CONFIG_VERSION] > ver){  //Èç¹û¼ÓÔØµÄ°æ±¾´óÓÚflash°æ±¾
-		readMotormessage();                                                          
+	else if (parameter[CONFIG_VERSION] > ver){  //å¦‚æœåŠ è½½çš„ç‰ˆæœ¬å¤§äºflashç‰ˆæœ¬                                                        
 		configFlashWrite();	
-	}																																								//Ğ´Èëflash,Õâ¸öÇé¿öÖ»´æÔÚÓÚÓĞSD¿¨Ê±£¬ÇÒSD¿¨ÖĞµÄ°æ±¾¸ßÓÚflashÖĞµÄ°æ±¾²Å»á·¢Éú
+	}																																								//å†™å…¥flash,è¿™ä¸ªæƒ…å†µåªå­˜åœ¨äºæœ‰SDå¡æ—¶ï¼Œä¸”SDå¡ä¸­çš„ç‰ˆæœ¬é«˜äºflashä¸­çš„ç‰ˆæœ¬æ‰ä¼šå‘ç”Ÿ
 }
 
 unsigned int configParameterRead(void *data) {

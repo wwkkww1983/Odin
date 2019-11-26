@@ -189,10 +189,8 @@ void supervisorMotorError(void){																			//检测基础动力是否正常
 void supervisorFlash(void){	   																				//Flash储存
 	if(supervisorData.flashSave){                                       //如果想要对flash进行操作，直接将supervisorData.flashSave拉高一次即可
 		supervisorData.beepState = MUSIC_PARAMCALI;												//检测到需要存入Flash		参数保存提示音
-		writeMotormessage();                                              //将从flash里面读出来数据写到TF卡的数组里面
 		configFlashWrite();                                             	//写入flash
 		parameterWriteDataFormFlash(robotConfigData.typeOfRobot);					//写入TF卡PID参数
-		motorMessageWriteDataFormFlash(robotConfigData.typeOfRobot);      //写入TF卡电机配置参数 
 		digitalLo(&supervisorData.flashSave);                             	
 	} 	
 }
