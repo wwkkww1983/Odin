@@ -14,8 +14,8 @@ void supplyUpdate(void){
 }
 
 void supplyInit(void){
-	supplyData.speedPID = pidInit(&parameter[LOADED_SPEED_P], &parameter[LOADED_SPEED_I], &parameter[LOADED_SPEED_D], &parameter[LOADED_SPEED_F],	\
-													&parameter[LOADED_SPEED_PM], &parameter[LOADED_SPEED_IM], &parameter[LOADED_SPEED_DM], &parameter[LOADED_SPEED_OM],	\
+	supplyData.speedPID = pidInit(&parameter[SHOOT_DIAL_S_P], &parameter[SHOOT_DIAL_S_I], &parameter[SHOOT_DIAL_S_D], &parameter[SHOOT_DIAL_S_F],	\
+													&parameter[SHOOT_DIAL_S_PM], &parameter[SHOOT_DIAL_S_IM], &parameter[SHOOT_DIAL_S_DM], &parameter[SHOOT_DIAL_S_OM],	\
 													NULL, NULL, NULL, NULL);
 	supplyData.supplySpeedRef = 80;
 }

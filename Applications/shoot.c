@@ -728,17 +728,17 @@ void shootInit(void){
 #endif
 	bulletMonitorInit();																										//数弹光电传感器初始化
 	
-	shootData.speedPID = pidInit(&parameter[LOADED_SPEED_P], &parameter[LOADED_SPEED_I], &parameter[LOADED_SPEED_D], &parameter[LOADED_SPEED_F],	\
-													&parameter[LOADED_SPEED_PM], &parameter[LOADED_SPEED_IM], &parameter[LOADED_SPEED_DM], &parameter[LOADED_SPEED_OM],	\
-													NULL, NULL, NULL, NULL); 
-	shootData.fricWheelSpeedPID[0]  = pidInit(&parameter[SHOOT_SPEED_P], &parameter[SHOOT_SPEED_I], &parameter[SHOOT_SPEED_D], &parameter[SHOOT_SPEED_F],	\
-													      &parameter[SHOOT_SPEED_PM], &parameter[SHOOT_SPEED_IM], &parameter[SHOOT_SPEED_DM], &parameter[SHOOT_SPEED_OM],	\
+	shootData.speedPID = pidInit(&parameter[SHOOT_DIAL_S_P], &parameter[SHOOT_DIAL_S_I], &parameter[SHOOT_DIAL_S_D], &parameter[SHOOT_DIAL_S_F],	\
+													&parameter[SHOOT_DIAL_S_PM], &parameter[SHOOT_DIAL_S_IM], &parameter[SHOOT_DIAL_S_DM], &parameter[SHOOT_DIAL_S_OM],	\
+													NULL, NULL, NULL, NULL);
+	shootData.fricWheelSpeedPID[0]  = pidInit(&parameter[SHOOT_FRIC_P], &parameter[SHOOT_FRIC_I], &parameter[SHOOT_FRIC_D], &parameter[SHOOT_FRIC_F],	\
+													      &parameter[SHOOT_FRIC_PM], &parameter[SHOOT_FRIC_IM], &parameter[SHOOT_FRIC_DM], &parameter[SHOOT_FRIC_OM],	\
 													      NULL, NULL, NULL, NULL); 
-	shootData.fricWheelSpeedPID[1]  = pidInit(&parameter[SHOOT_SPEED_P], &parameter[SHOOT_SPEED_I], &parameter[SHOOT_SPEED_D], &parameter[SHOOT_SPEED_F],	\
-													      &parameter[SHOOT_SPEED_PM], &parameter[SHOOT_SPEED_IM], &parameter[SHOOT_SPEED_DM], &parameter[SHOOT_SPEED_OM],	\
+	shootData.fricWheelSpeedPID[1]  = pidInit(&parameter[SHOOT_FRIC_P], &parameter[SHOOT_FRIC_I], &parameter[SHOOT_FRIC_D], &parameter[SHOOT_FRIC_F],	\
+													      &parameter[SHOOT_FRIC_PM], &parameter[SHOOT_FRIC_IM], &parameter[SHOOT_FRIC_DM], &parameter[SHOOT_FRIC_OM],	\
 													      NULL, NULL, NULL, NULL); 
-	shootData.turntablePID = 	pidInit(&parameter[ROLLBULL_SPEED_P], &parameter[ROLLBULL_SPEED_I], &parameter[ROLLBULL_SPEED_D], &parameter[ROLLBULL_SPEED_F],	\
-													      &parameter[ROLLBULL_SPEED_PM], &parameter[ROLLBULL_SPEED_IM], &parameter[ROLLBULL_SPEED_DM], &parameter[ROLLBULL_SPEED_OM],	\
+	shootData.turntablePID = 	pidInit(&parameter[SHOOT_DIAL_L_P], &parameter[SHOOT_DIAL_L_I], &parameter[SHOOT_DIAL_L_D], &parameter[SHOOT_DIAL_L_F],	\
+													      &parameter[SHOOT_DIAL_L_PM], &parameter[SHOOT_DIAL_L_IM], &parameter[SHOOT_DIAL_L_DM], &parameter[SHOOT_DIAL_L_OM],	\
 													      NULL, NULL, NULL, NULL);	
 	
 	digitalClan(&shootData.bulletRemain);

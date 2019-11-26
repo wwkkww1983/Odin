@@ -52,7 +52,7 @@ enum parameterslist{
 	PITCH_RATE_DM,
 	PITCH_RATE_OM,
 	
-	ROLL_ANG_P,											//云台yaw角度环参数
+	ROLL_ANG_P,											//云台roll角度环参数
 	ROLL_ANG_I,
 	ROLL_ANG_D,
 	ROLL_ANG_F,
@@ -61,7 +61,7 @@ enum parameterslist{
 	ROLL_ANG_DM,
 	ROLL_ANG_OM,
 	
-	ROLL_RATE_P,    									//云台ROLL角速度环参数
+	ROLL_RATE_P,    									//云台roll角速度环参数
 	ROLL_RATE_I,
 	ROLL_RATE_D,
 	ROLL_RATE_F,
@@ -115,36 +115,35 @@ enum parameterslist{
 	POWER_LIMIT_DM,
 	POWER_LIMIT_OM,
 	
-	SHOOT_SPEED_P,									//发射机构速度环
-	SHOOT_SPEED_I,
-	SHOOT_SPEED_D,
-	SHOOT_SPEED_F,
-	SHOOT_SPEED_PM,
-	SHOOT_SPEED_IM,
-	SHOOT_SPEED_DM,
-	SHOOT_SPEED_OM,
+	SHOOT_FRIC_P,									//发射机构速度环
+	SHOOT_FRIC_I,
+	SHOOT_FRIC_D,
+	SHOOT_FRIC_F,
+	SHOOT_FRIC_PM,
+	SHOOT_FRIC_IM,
+	SHOOT_FRIC_DM,
+	SHOOT_FRIC_OM,
 	
-	ROLLBULL_SPEED_P,								//大弹丸拨弹机构
-	ROLLBULL_SPEED_I,
-	ROLLBULL_SPEED_D,
-	ROLLBULL_SPEED_F,
-	ROLLBULL_SPEED_PM,
-	ROLLBULL_SPEED_IM,
-	ROLLBULL_SPEED_DM,
-	ROLLBULL_SPEED_OM,
+	SHOOT_DIAL_L_P,								//大弹丸拨弹机构(大拨弹盘)
+	SHOOT_DIAL_L_I,
+	SHOOT_DIAL_L_D,
+	SHOOT_DIAL_L_F,
+	SHOOT_DIAL_L_PM,
+	SHOOT_DIAL_L_IM,
+	SHOOT_DIAL_L_DM,
+	SHOOT_DIAL_L_OM,
 	
-	LOADED_SPEED_P,									//拨弹机构速度环
-	LOADED_SPEED_I,
-	LOADED_SPEED_D,
-	LOADED_SPEED_F,
-	LOADED_SPEED_PM,
-	LOADED_SPEED_IM,
-	LOADED_SPEED_DM,
-	LOADED_SPEED_OM,
+	SHOOT_DIAL_S_P,								//拨弹机构速度环(小拨弹盘)
+	SHOOT_DIAL_S_I,
+	SHOOT_DIAL_S_D,
+	SHOOT_DIAL_S_F,
+	SHOOT_DIAL_S_PM,
+	SHOOT_DIAL_S_IM,
+	SHOOT_DIAL_S_DM,
+	SHOOT_DIAL_S_OM,
 
 
-/*----------------	以下参数存储到TF卡另一个文件	（motor文件）----------------*/
-	LOCAL_ID,                           //该段参数与下电机参数文件列表参数相同，只是名字不同
+	LOCAL_ID,                           //电机参数
 	WEAPON_TYPE,
 	YAW_INSTALL,
 	PITCH_INSTALL,

@@ -208,7 +208,7 @@ void ANO_DT_Data_Exchange(void){
 	{
 		f.sendPid4 = 0;
 		ANO_DT_Send_PID(4,0,0,0,
-											parameter[LOADED_SPEED_P],parameter[LOADED_SPEED_I],parameter[LOADED_SPEED_D],
+											parameter[SHOOT_DIAL_S_P],parameter[SHOOT_DIAL_S_I],parameter[SHOOT_DIAL_S_D],
 											0,0,0);
 	}
 //	else if(f.sendLocation == 2)
@@ -765,9 +765,9 @@ void ANO_DT_Data_Receive_Anl(u8 *data_buf,u8 num){
 //		parameter[PROPORTIONAL_POS_I]  = 0.001*( (vs16)(*(data_buf+6)<<8)|*(data_buf+7) );
 //		parameter[PROPORTIONAL_POS_D]  = 0.001*( (vs16)(*(data_buf+8)<<8)|*(data_buf+9) );
 	
-		parameter[LOADED_SPEED_P]  = 0.001*( (vs16)(*(data_buf+10)<<8)|*(data_buf+11) );
-		parameter[LOADED_SPEED_I]  = 0.001*( (vs16)(*(data_buf+12)<<8)|*(data_buf+13) );
-		parameter[LOADED_SPEED_D]  = 0.001*( (vs16)(*(data_buf+14)<<8)|*(data_buf+15) );	
+		parameter[SHOOT_DIAL_S_P]  = 0.001*( (vs16)(*(data_buf+10)<<8)|*(data_buf+11) );
+		parameter[SHOOT_DIAL_S_I]  = 0.001*( (vs16)(*(data_buf+12)<<8)|*(data_buf+13) );
+		parameter[SHOOT_DIAL_S_D]  = 0.001*( (vs16)(*(data_buf+14)<<8)|*(data_buf+15) );	
 			
 		if(f.sendCheck == 0)
 		{
