@@ -199,7 +199,7 @@ static void followGimbalHandle(void){
 	else 
 		gimbalData.yawMotorAngle   = ENCODER_ANGLE_RATIO14 * getRelativePos(gimbal_chooseData(CODEBOARD_VALUE,&yawMotorData),parameter[YAW_CENTER],&yawMotorData);
 	//µ×ÅÌ¸úËæ·´À¡¸³Öµ	
-	chassisData.chaseFbd = gimbalData.yawMotorAngle;     
+	chassisData.chaseFbd = getInstallDirect(parameter[YAW_INSTALL], INSTALL_TURN)*gimbalData.yawMotorAngle;     
 	
 #if	USE_CHANGE_HEAD	
 	if(chassisData.changeHeadOrder && robotConfigData.typeOfRobot==INFANTRY_ID){
@@ -229,7 +229,7 @@ static void followGimbalHandle(void){
 	chassisData.manualSpeedTarget.y = (remoteControlData.chassisSpeedTarget.x + keyBoardCtrlData.chassisSpeedTarget.x) * sinAngle \
 									  + (remoteControlData.chassisSpeedTarget.y + keyBoardCtrlData.chassisSpeedTarget.y) * cosAngle;
 #ifdef ADD_IMU_RATE_PID
-	chassisData.chaseAngleOut = getInstallDirect(parameter[YAW_INSTALL], INSTALL_TURN) \
+	chassisData.chaseAngleOut = -getInstallDirect(parameter[YAW_INSTALL], INSTALL_TURN) \
 								* pidUpdate(chassisData.chasePID, chassisData.chaseFbd, \
 											chassisData.chaseRef, chassisData.intervalTime);
 	chassisData.chaseSpeedRef = chassisData.chaseAngleOut;

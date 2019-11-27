@@ -195,10 +195,6 @@ void canSendUpToRobot(){
 	rmmotor_senddata(CAN1, 0x200,&canSendData.can1_0x200);	              								//地盘
 	if(ROBOT != AUXILIARY_ID)
 		rmmotor_senddata(CAN1, 0x2FF,&canSendData.can1_0x2FF);
-			
-	
-	
-	
 }
 void canSendUpdate(void){
 	canSendChassisUpdate();																																//底盘CAN发送更新
